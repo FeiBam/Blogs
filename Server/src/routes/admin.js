@@ -1,7 +1,7 @@
 const KoaRouter = require('@koa/router')
 const router = new KoaRouter()
 const isLogin = require('../Middleware/isLogin')
-const adminControllers = require('../controllers/admin')
+const adminControllers = require('../controllers/AdminControllers')
 
 
 router.get('/login',async(ctx,next)=>{
@@ -20,6 +20,8 @@ router.get('/test',async (ctx)=>{
 router.post('/createArticle',adminControllers.createArticle)
 
 router.get('/getAllArticle',adminControllers.getAllArticle)
+
+
 module.exports = {
     router
 }

@@ -40,6 +40,7 @@ adminControllers.getAllArticle = async (ctx) =>{
     }
     catch (err) {
         Transaction.rollback()
+        throw err
     }
 }
 

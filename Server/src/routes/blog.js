@@ -1,10 +1,12 @@
 const KoaRouter = require('@koa/router')
 const router = new KoaRouter()
-const controller = require('../controllers/blog')
+const BlogController = require('../controllers/BlogControllers')
 
-router.get('/page/:id',controller.getPage)
+router.get('/page/:id',BlogController.getPage)
 
-router.get('/getArticleTag/:id',controller.getArticleTag)
+router.get('/getArticleTag/:id',BlogController.getArticleTag)
+
+router.get('/getFriendLinks',BlogController.getFriendLinks)
 
 
 module.exports = {

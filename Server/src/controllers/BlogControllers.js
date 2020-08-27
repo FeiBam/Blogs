@@ -1,6 +1,7 @@
 const config = require('../config/index')
 const { asyncErrCatch } = require('../unit/asyncErrCatch')
 const ArticleService = require('../services/ArticleService')
+const FriendService = require('../services/FriednLinksService')
 const BlogDB = require('../db/index')
 const respondHandel = require('../unit/respondHandel')
 
@@ -32,14 +33,25 @@ blogControllers.getArticleTag = async (ctx) => {
         const Article = await ArticleService.getArticleById(ArticleId,Transaction)
         const ArticleTag = await ArticleService.getTag(Article,Transaction)
         Transaction.commit()
-        return respondHandel.success(ctx,ArticleTag,'ok','0')
+        return respondHandel.success(ctx,ArticleTag,'ok',0)
     }
     catch (e) {
         Transaction.rollback()
         throw e
     }
-
 }
+
+blogControllers.getFriendLinks = async (ctx) => {
+    const Transaction = await BlogDB.transaction()
+    const [err,FriendLinks] = await asyncErrCatch(FriendService.getAllFriendLinks(Transaction))
+    if (err){
+        Transaction.rollback()
+        throw err
+    }
+    Transaction.commit()
+    return respondHandel.success(ctx,FriendLinks,'ok',0)
+}
+
 
 
 

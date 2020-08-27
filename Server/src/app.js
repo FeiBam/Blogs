@@ -5,10 +5,16 @@ const { router } = require('./routes/index')
 const Cache = require('./unit/Cache')
 const { responseHandler, errorHandler } = require('./Middleware/response')
 const { loggerMiddleware } = require('./Middleware/logger')
+const { HttpRespondBase } = require('./unit/respondHandel')
+const AccountInit = require('./Middleware/initAccount')
+
+AccountInit()
+
 
 
 const TokenCache = new Cache(true)
 const app = new Koa()
+
 
 
 app.use(KoaBody()) //插件原因 必须放在最上面才能正常获取传递的参数
