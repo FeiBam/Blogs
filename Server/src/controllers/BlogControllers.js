@@ -1,27 +1,29 @@
+
 const config = require('../config/index')
 const { asyncErrCatch } = require('../unit/asyncErrCatch')
 const ArticleService = require('../services/ArticleService')
 const FriendService = require('../services/FriednLinksService')
 const BlogDB = require('../db/index')
-const respondHandel = require('../unit/respondHandel')
+const { respondHandel } = require('../unit/respondHandel')
+
+
 
 
 const blogControllers = {}
-
+console.log(global.ErrorHandel)
 
 blogControllers.getPage = async (ctx) => {
     if (ctx.params.id < 1){
-        return respondHandel.AttributeError(ctx,-1,'pageNum not allow')
+        return respondHandel.AttributeError(ctx,-1,'Not Allow PageNum')
     }
-    const PageNum = ctx.params.id - 1
+    const PageNum = ctx.params.id
     const Transaction = await BlogDB.transaction()
     try {
-        const Articles = await ArticleService.getArticles(PageNum,Transaction,config.select.blog.pageArticleLimit)
-        Transaction.commit()
-        return respondHandel.success(ctx,Articles,`ok`,null)
+        const Articles = await ArticleService.getPage(PageNum,Transaction)
+        console.log(ErrHandler)
     }
     catch (err) {
-        Transaction.rollback()
+        await Transaction.rollback()
         throw err
     }
 }
@@ -43,7 +45,7 @@ blogControllers.getArticleTag = async (ctx) => {
 
 blogControllers.getFriendLinks = async (ctx) => {
     const Transaction = await BlogDB.transaction()
-    const [err,FriendLinks] = await asyncErrCatch(FriendService.getAllFriendLinks(Transaction))
+    const [Err,FriendLinks] = await asyncErrCatch(FriendService.getAllFriendLinks(Transaction))
     if (err){
         Transaction.rollback()
         throw err

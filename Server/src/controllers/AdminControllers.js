@@ -1,11 +1,18 @@
 const ArticleService  = require('../services/ArticleService')
+const AccountService = require('../services/AccountService')
 const BlogDB = require('../db/index')
+
+//DB required
 const config = require('../config/index')
+
+//config required
 const respondHandel = require('../unit/respondHandel')
 const { asyncErrCatch } = require('../unit/asyncErrCatch')
 const Joi = require('@hapi/joi')
 const Jois = require('../unit/Jois')
 const schemas = require('../config/schemas')
+const { ErrHandler } = require('../app')
+//model required
 
 function AttributeError(err) {
     const Err = new Error(err)
@@ -44,7 +51,20 @@ adminControllers.getAllArticle = async (ctx) =>{
     }
 }
 
+adminControllers.adminLogin = async (ctx) =>{
+    const Transaction = await BlogDB.transaction()
+    const UserName = ctx.request.body.Name
+    const PassWord = ctx.request.body.Password
+
+    const [err,Admin] = await asyncErrCatch(AccountService.getAccount(UserName,Transaction))
+    if (err){
+        ErrorHandel.EmitEvent(EventMixin.NOT_FOUND)
+    }
+}
 
 
 
-module.exports = adminControllers
+
+module.exports = {
+    adminControllers,
+}

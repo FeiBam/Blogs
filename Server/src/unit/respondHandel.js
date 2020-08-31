@@ -1,3 +1,5 @@
+
+
 const respondHandel = {
 
 }
@@ -12,5 +14,24 @@ respondHandel.success = (ctx,data,message,other) =>{
     }
 }
 
+respondHandel.notFound = (ctx,message,other) => {
+    ctx.status = 404
+    ctx.body = {
+        status:404,
+        message:message,
+        ...other
+    }
+}
 
-module.exports = respondHandel
+respondHandel.AttributeError = (ctx,code,message,other) => {
+    ctx.status = 400
+    ctx.body = {
+        status:code,
+        message:message,
+        ...other
+    }
+}
+
+module.exports = {
+    respondHandel,
+}
