@@ -8,15 +8,15 @@ class Article extends Model{
 
 Article.init(
     {
-        name:{
+        Title:{
             type:DataTypes.STRING,
             allowNull:false
         },
-        introduction:{
+        Introduction:{
             type:DataTypes.STRING,
             allowNull:false,
         },
-        subject:{
+        Subject:{
             type:DataTypes.TEXT,
             allowNull:false
         },

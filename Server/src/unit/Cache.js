@@ -15,7 +15,10 @@ function Cache(autoRemoveTimeOutEvent,timeout = 60) {
         }
         return false
     } //提供key名字查找对象 base.select(114514) 如果存在 索引值，返回索引对象，否则返回 false
-    this.add = async function (key,value,timeout = Infinity) {
+    this.add = async function (key,value,timeout ) {
+        if (typeof value !== 'object'){
+            value = { value }
+        }
         let object ={
             key,
             time:Date.now(),
@@ -25,6 +28,7 @@ function Cache(autoRemoveTimeOutEvent,timeout = 60) {
             },
         }
         this.CacheSpace.push(object)
+        return object
     }     //添加元素 base.add(114513,{time:name,data:'野兽前辈！'},1000) 无返回值
     this.remove = async function (key) {
         const index = await this.select(key)
@@ -45,6 +49,20 @@ function Cache(autoRemoveTimeOutEvent,timeout = 60) {
             return this.CacheSpace.splice(object.index,1,replaceObject).length !==0
         }
     } // 替换元素 base.replace(114514,{time:Date.Now(),data:'啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊！'},2000)
+    this.update = async function (key,Object) {
+        const OriginObject = await this.select(key)
+        const updateObject = {
+            key,
+            time:Object.time,
+            updateTime:Date.now(),
+            timeout:Object.timeout,
+            value:Object.value
+        }
+        if (OriginObject){
+            return this.CacheSpace.splice(OriginObject.index,1,updateObject).length !==0
+        }
+
+    }
     this.removeTimeoutData = function () {
         for (item of this.CacheSpace){
             if ((Date.now() - item.time) > item.timeout){

@@ -6,18 +6,17 @@ const BlogDB = require('../db/index')
 const config = require('../config/index')
 
 //config required
-const respondHandel = require('../unit/respondHandel')
+
+const { TokenCache } = require('../app')
+const { respondHandel } = require('../unit/respondHandel')
 const { asyncErrCatch } = require('../unit/asyncErrCatch')
-const Joi = require('@hapi/joi')
 const Jois = require('../unit/Jois')
 const schemas = require('../config/schemas')
-const { ErrHandler } = require('../app')
+
 //model required
 
 function AttributeError(err) {
-    const Err = new Error(err)
-    Err.status = 401
-    throw Err
+
 }
 
 const adminControllers = {
@@ -25,7 +24,10 @@ const adminControllers = {
 
 adminControllers.createArticle = async (ctx,next) =>{
     const Transaction = await BlogDB.transaction()
-    const data = await Jois(schemas.Article,ctx.request.body,AttributeError)
+    const [Err,CheckedData] = await Jois(schemas.Article,ctx.request.body)
+    if (Err){
+        ctx.throw(400,'参数错误!',Err)
+    }
     try {
         const ArticleObject = await ArticleService.createArticle(data,Transaction)
         console.log(ArticleObject)
@@ -33,7 +35,7 @@ adminControllers.createArticle = async (ctx,next) =>{
         respondHandel.success(ctx,ArticleObject,'ok')
     }
     catch (err) {
-        Transaction.rollback()
+        await Transaction.rollback()
         throw err
     }
 }
@@ -42,23 +44,31 @@ adminControllers.getAllArticle = async (ctx) =>{
     const Transaction = await BlogDB.transaction()
     try {
         const ArticleObject = await ArticleService.getArticles(null,Transaction,true)
-        Transaction.commit()
+        await Transaction.commit()
         respondHandel.success(ctx,ArticleObject,'ok')
     }
     catch (err) {
-        Transaction.rollback()
+        await Transaction.rollback()
         throw err
     }
 }
 
 adminControllers.adminLogin = async (ctx) =>{
     const Transaction = await BlogDB.transaction()
-    const UserName = ctx.request.body.Name
-    const PassWord = ctx.request.body.Password
-
-    const [err,Admin] = await asyncErrCatch(AccountService.getAccount(UserName,Transaction))
-    if (err){
-        ErrorHandel.EmitEvent(EventMixin.NOT_FOUND)
+    const [Err,CheckedData] = await Jois(schemas.Login,ctx.request.body)
+    if (Err){
+        ctx.throw(400,'参数错误!',Err)
+    }
+    try{
+        const AccessToken = await AccountService.Login(ctx,Transaction,CheckedData.UserName,CheckedData.PassWord)
+        await Transaction.commit()
+        ctx.set('Access-Token',AccessToken)
+        ctx.set('Access-Control-Expose-Headers','Access-Token')
+        respondHandel.success(ctx,'','ok')
+    }
+    catch (e) {
+        await Transaction.rollback()
+        throw e
     }
 }
 

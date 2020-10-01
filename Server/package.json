@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "axios": "^0.19.2",
+    "@hapi/joi": "^17.1.1",
+    "@koa/cors": "^3.1.0",
+    "@koa/router": "^9.4.0",
     "ali-oss": "^6.10.0",
+    "axios": "^0.19.2",
+    "jsrsasign": "^9.1.9",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "log4js": "^6.3.0",

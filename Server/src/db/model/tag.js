@@ -8,15 +8,15 @@ class Tag extends Model{
 
 Tag.init(
     {
-        name:{
+        Name:{
             type:DataTypes.STRING,
             allowNull:false
         },
-        target:{
+        Target:{
             type:DataTypes.STRING,
             allowNull:true
         },
-        icon:{
+        Icon :{
             type:DataTypes.STRING,
             allowNull:true
         },

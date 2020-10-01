@@ -7,10 +7,23 @@ import AntdV from 'ant-design-vue'
 import router from "./router";
 import store from "./store";
 
+import '../public/fontawesome-free-5.14.0-web/css/all.min.css'
+import 'ant-design-vue/dist/antd.css'
+import './utils/Permission'
 
-import './unit/Permission'
 
 Vue.config.productionTip = false
+
+Vue.prototype.$throttle = function (func, timeFrame) {
+  let lastTime = 0;
+  return function () {
+    const now = new Date();
+    if (now - lastTime >= timeFrame) {
+      func();
+      lastTime = now;
+    }
+  };
+}
 
 Vue.use(Vuex)
 Vue.use(VueAxios,Axios)

@@ -9,19 +9,19 @@ class Account extends Model {
 
 Account.init(
     {
-        name:{
+        Name:{
             type:DataTypes.STRING,
             allowNull:false,
         },
-        passWord:{
+        PassWord:{
             type:DataTypes.STRING,
             allowNull:false,
         },
-        img:{
+        Img:{
             type:DataTypes.STRING,
             allowNull:true
         },
-        active:{
+        Active:{
             type:DataTypes.BOOLEAN,
             allowNull:false,
             defaultValue:false

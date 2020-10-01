@@ -1,17 +1,23 @@
 const KoaRouter = require('@koa/router')
 const router = new KoaRouter()
-const isLogin = require('../Middleware/isLogin')
-const adminControllers = require('../controllers/AdminControllers')
+const isLogged = require('../middleware/isLogin')
+const TokenVerification = require('../middleware/TokenVerification')
+const { adminControllers } = require('../controllers/AdminControllers')
+const { respondHandel } = require('../unit/respondHandel')
 
 
 
 
-router.get('/test',async (ctx)=>{
-    ctx.body = 'admin test message'
+
+router.post('/login',adminControllers.adminLogin)
+
+router.use(TokenVerification)
+
+
+router.get('/test',async (ctx,next)=>{
+    respondHandel.success(ctx , '' , 'Ok!')
+    next()
 })
-
-
-
 
 module.exports = {
     router

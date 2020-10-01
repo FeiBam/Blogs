@@ -7,15 +7,15 @@ class FriendLink extends Model{
 }
 FriendLink.init(
     {
-        name:{
+        Name:{
             type:DataTypes.STRING,
             allowNull:false
         },
-        img:{
+        Img:{
             type:DataTypes.STRING,
             allowNull:false
         },
-        url:{
+        Url:{
             type:DataTypes.STRING,
             allowNull:false
         },

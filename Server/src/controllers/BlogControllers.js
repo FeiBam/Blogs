@@ -1,26 +1,39 @@
-
+const ErrCodeMixin = require('../unit/errorHandel/errorCodeMinxi')
 const config = require('../config/index')
 const { asyncErrCatch } = require('../unit/asyncErrCatch')
 const ArticleService = require('../services/ArticleService')
 const FriendService = require('../services/FriednLinksService')
 const BlogDB = require('../db/index')
 const { respondHandel } = require('../unit/respondHandel')
-
+const { UserErrHandel } = require('../unit/errorHandel/errHandel')
+const { ObjectRemove } = require('../unit/SameObjectRemove')
 
 
 
 const blogControllers = {}
-console.log(global.ErrorHandel)
 
 blogControllers.getPage = async (ctx) => {
     if (ctx.params.id < 1){
-        return respondHandel.AttributeError(ctx,-1,'Not Allow PageNum')
+        UserErrHandel(ctx,400, ErrCodeMixin.ATTRIBUTE_ERR )
     }
     const PageNum = ctx.params.id
     const Transaction = await BlogDB.transaction()
     try {
-        const Articles = await ArticleService.getPage(PageNum,Transaction)
-        console.log(ErrHandler)
+        const Articles = await ArticleService.getPage(ctx,Transaction,PageNum)
+        const ObjectRe = {
+            dataValues:{
+                id:'',
+                updatedAt:'',
+                onDelete:'',
+                AccountId:'',
+                Account:''
+            }
+        }
+        Articles.forEach(item=>{
+            ObjectRemove(item,ObjectRe)
+        })
+        await Transaction.commit()
+        return respondHandel.success(ctx,Articles,'ok')
     }
     catch (err) {
         await Transaction.rollback()

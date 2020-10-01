@@ -16,11 +16,33 @@ const ArticleApi = {
             subject:data.subject
         },{ transaction:Tra })
     },
-    async getArticles(page,limit,offset,showDelete = false,Tra){
+    async getArticlesByLimit(Tra,limit,offset,showDelete = false){
         return Article.findAll({
             limit:limit,
             offset:offset
         },{ transaction:Tra , paranoid:!showDelete })
+    },
+    async getArticleByLimitWithTag(Tra,limit,offset,showDelete = false){
+        return Article.findAll({
+            limit:limit,
+            offset:offset,
+            include:Tag
+        },{ transaction:Tra , paranoid:!showDelete})
+    },
+    async getArticleByLimitWithAll(Tra,limit,offset,showDelete = false){
+        return Article.findAll({
+            limit:limit,
+            offset:offset,
+            include:[Tag,Account],
+        },{ transaction:Tra , paranoid:!showDelete })
+    },
+    async getAllArticleWithAll(Tra,showDelete = false){
+        return Article.findAll({},{ transaction:Tra , paranoid:!showDelete })
+    },
+    async getArticleByName(name,Tra,ShowDelete){
+        return Article.findOne({
+            where:name
+        }, { transaction:Tra })
     },
     async getArticleById(id,Tra,showDelete = false){
         return Article.findByPk(id,{ transaction:Tra , paranoid:!showDelete })
@@ -39,7 +61,7 @@ const ArticleApi = {
     },
     async getTag(model,Tra){
         return model.getTags({ transaction:Tra })
-    }
+    },
 }
 
 

@@ -10,7 +10,9 @@
   "dependencies": {
     "ant-design-vue": "^1.6.5",
     "axios": "^0.20.0",
+    "babel-plugin-import": "^1.13.0",
     "core-js": "^3.6.5",
+    "jsrsasign": "^10.0.0",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
     "vue-router": "^3.4.3",
