@@ -1,7 +1,7 @@
 <template>
     <div class="Article-Tag">
         <template v-for="item in Tags">
-            <a v-bind:key="item.id" ><i class="fas fa-tag fa-fw"></i>{{item.name}}</a>
+            <a v-bind:key="item.id" ><i class="fas fa-tag fa-fw"></i>{{item.Name}}</a>
         </template>
     </div>
 </template>

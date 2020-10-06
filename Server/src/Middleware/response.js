@@ -15,17 +15,6 @@ const responseHandler = async (ctx) =>{
 
 const errorHandler = async (ctx,next) => {
     return next().catch(err => {
-        if (ctx.userErr){
-            ctx.status = err.status || 500
-            ctx.body = {
-                status:ctx.status,
-                code:err.code || -1,
-                message: err.message || '',
-                data:'',
-                other:err.other
-            }
-            return Promise.resolve()
-        }
         ctx.status = err.status || 500
         ctx.body = {
             status:ctx.status,
@@ -33,6 +22,9 @@ const errorHandler = async (ctx,next) => {
             message: err.message || '',
             data:'',
             other:err.other
+        }
+        if (ctx.userErr){
+            return Promise.resolve()
         }
         logger.error(err)
         return Promise.reject(err)

@@ -1,19 +1,28 @@
 const DataMixin = {
-    TagActive: state => state.ActiveTag
+    TagActive: state => state.ActiveTag,
+    ViewArticleData:state => state.ViewArticleData,
+
 }
 
 const MutationsMixin = {
     changePage:'changePage',
-    addArticle:'addArticle'
+    addArticle:'addArticle',
+    setTags:'setTags'
+}
+
+const GetterMixin = {
+    GetPage:'GetPage'
 }
 
 const ActionsMixin = {
     ViewArticle:'ViewArticle',
-    GetPage:'GetPage'
+    GetPage:'GetPage',
+    PreviewArticle:'ViewArticle'
 }
 
 export {
     DataMixin,
     MutationsMixin,
-    ActionsMixin
+    ActionsMixin,
+    GetterMixin
 }

@@ -52,7 +52,7 @@
             return{
                 passWordRule:[
                     { required: true, message: '请输入密码!' },
-                    {max:18,message: '密码不可以超过18位'},
+                    {max:20,message: '密码不可以超过20位'},
                     {min:8,message: '密码不能小于8位'},
                 ],
             }

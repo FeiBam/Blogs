@@ -8,10 +8,10 @@ const AccountApi = {
             Img: data.Img,
         }, {transaction: Tra})
     },
-    async getAccount(name,Tra){
+    async getAccountByName(Name,Tra){
         return await Account.findOne({
             where:{
-                Name:name
+                Name:Name
             }
         },{ transaction:Tra })
     },

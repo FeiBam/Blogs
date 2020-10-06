@@ -13,6 +13,9 @@ module.exports = async (ctx,next) => {
         UserErrHandel(ctx,403,ErrTypeMixin.TOKEN_NOT_FOUND)
     }
     if (Jwt.verify(ctx.get('Access-Token'),config.secret.Salt,config.secret.JwtHead.alg)){
+        const PayLoad = Jwt.GetPayLoad(ctx.get('Access-Token'))
+        ctx.state.AccountName = PayLoad.Name
+        ctx.state.AccountId = PayLoad.id
         next()
     }
 }

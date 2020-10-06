@@ -19,16 +19,16 @@ AccountService.Login = async (ctx,Tra,UserName,Password) => {
             UserErrHandel(ctx,401,ErrorTypeMixin.REPEAT_LOGIN)
         }
         const ShaPassWord = HMACSHA256(Password,UserName)
-        const UserObject = await AccountApi.getAccount(UserName,Tra)
+        const UserObject = await AccountApi.getAccountByName(UserName,Tra)
         if (!UserObject){
             UserErrHandel(ctx,404, ErrorTypeMixin.NOT_FOUND_ERR)
         }
-        if (UserObject.passWord !== ShaPassWord){
+        if (UserObject.PassWord !== ShaPassWord){
             UserErrHandel(ctx,400,ErrorTypeMixin.ACCOUNT_VERIFICATION_ERR)
         }
         const PayLoad = {
             id:UserObject.id,
-            Name:UserObject.name,
+            Name:UserObject.Name,
             Avatar:UserObject.Avatar,
             LoginAt:Date.now()
         }
@@ -56,6 +56,7 @@ AccountService.CreateAccount = async (ctx,Tra,UserName,Password,Avatar) => {
     return Account
 }
 
+
 AccountService.GenAccessToken = async (payload) =>{
     try{
         return JWT.encode(config.secret.JwtHead,payload,config.secret.Salt,'HS256')
@@ -63,5 +64,6 @@ AccountService.GenAccessToken = async (payload) =>{
         throw e
     }
 }
+
 
 module.exports = AccountService

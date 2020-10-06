@@ -3,9 +3,8 @@ const KoaCors = require('@koa/cors')
 const KoaBody = require('koa-bodyparser')
 const { router } = require('./Routes/index')
 const Cache = require('./unit/Cache')
-const { responseHandler, errorHandler } = require('./middleware/response')
+const { errorHandler } = require('./middleware/response')
 const { loggerMiddleware } = require('./middleware/logger')
-const { HttpRespondBase } = require('./unit/respondHandel')
 
 const InitAccount = require('./middleware/initAccount')
 
@@ -23,16 +22,13 @@ app.use(KoaCors({
 }))
 app.use(loggerMiddleware) //日志中间件
 app.use(errorHandler) //错误回复中间件
+
 app.use(async (ctx,next)=>{
     ctx.TokenCache = TokenCache
     await next()
 })
+
 app.use(router.allowedMethods()) // 路由中间件
 app.use(router.routes())// 路由实例对象，通过RouterInject 注入routes
 
 app.listen(8000)
-
-console.log(TokenCache.CacheSpace)
-module.exports = {
-    TokenCache, //共享Token 储存空间
-}

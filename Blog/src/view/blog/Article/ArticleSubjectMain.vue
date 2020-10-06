@@ -1,11 +1,15 @@
 <template>
     <BaseContent>
         <div class="Article-Main">
-            <ArticleHead></ArticleHead>
-            <div class="ReadMore">
-                <a><i style="margin-right: 5px" class="fas fa-book-open fa-fw"></i>阅读全文</a>
+            <ArticleHead
+                    v-bind:Title="this.ViewArticleData.Title"
+                    v-bind:Text="this.ViewArticleData.Text"
+                    v-bind:Creator="this.ViewArticleData.Creator"
+            ></ArticleHead>
+            <hr>
+            <div v-html="SubjectHtml">
             </div>
-            <ArticleTags></ArticleTags>
+            <ArticleTags v-bind:Tags="this.ViewArticleData.Tags"></ArticleTags>
         </div>
     </BaseContent>
 </template>
@@ -14,18 +18,33 @@
     import ArticleHead from "./Components/ArticleHead";
     import ArticleTags from "./Components/ArticleTags";
     import BaseContent from "../../../components/Blog/BaseContent";
+
+    import markdown from 'markdown-it'
+
     import { ActionsMixin, DataMixin } from '../../../store/blog/Mixin'
     import { mapActions, mapState,} from 'vuex'
     export default {
         name: "ArticleSubjectMain",
+        data(){
+            return {
+                SubjectHtml: ''
+            }
+        },
         components:{
             ArticleHead,
             ArticleTags,
             BaseContent
         },
         computed:{
-            ...mapActions('Blog',ActionsMixin),
             ...mapState('Blog',DataMixin)
+        },
+        methods:{
+            ...mapActions('Blog',ActionsMixin)
+        },
+        mounted() {
+            console.log(this.ViewArticleData)
+            const md = new markdown()
+            this.SubjectHtml = md.render(this.ViewArticleData.Subject)
         }
     }
 </script>

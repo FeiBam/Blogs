@@ -26,7 +26,9 @@ blogControllers.getPage = async (ctx) => {
                 updatedAt:'',
                 onDelete:'',
                 AccountId:'',
-                Account:''
+                Account:{
+                    PassWord:''
+                }
             }
         }
         Articles.forEach(item=>{

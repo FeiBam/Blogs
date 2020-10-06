@@ -11,7 +11,7 @@ const BlogModel = {
         ViewTag:'',
         Article:[],
         Tags:[],
-        PageArticleLimit:0
+        PageArticleLimit:0,
     }),
     getters:{
 
@@ -22,37 +22,28 @@ const BlogModel = {
         },
         [MutationsMixin.addArticle]( state , ArticleObject ){
             state.Article.push(ArticleObject)
+        },
+        [MutationsMixin.setTags]( state , Tags){
+            state.Tags = Tags
         }
     },
     actions:{
         [ActionsMixin.ViewArticle]({ state , commit }, ArticleId){
             console.log(state,commit,ArticleId)
         },
-        [ActionsMixin.PageChange]( { state , commit } , PageNum){
-            console.log(state,commit,PageNum)
+        [ActionsMixin.PreviewArticle]( { state }, ArticleObject){
+            state.ViewArticleData = ArticleObject
         },
         async [ActionsMixin.GetPage]( { state , commit } , PageNum){
-            const deObject = {
-                id:0,
-                Title:'',
-                Text:'',
-                Creator:{
-                    Name:'',
-                    Date:''
-                },
-                Tags:[],
-            }
+            const EnObject = {}
             if (state.Article.length === 0 ){
                 const [err,res] = await AsyncErrCatch(request.GetPage(PageNum))
                 if (err){
                     throw err
                 }
-                res.data.forEach(item => {
-                    deObject["id"] = item.id
-                    deObject["Title"] = item.introduction
-                    deObject[""]
-                })
+            console.log(res)
             }
+            return {...EnObject,...commit,}
         }
     }
 }

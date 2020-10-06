@@ -45,6 +45,20 @@ respondHandel.UnauthorizedError = (ctx,code,message,...other) => {
     }
 }
 
+class RespondHandelBase{
+    constructor(ctx) {
+        this.TypeSpace = []
+        this.ctx = ctx
+        this.ctx.body = {
+            status:200,
+            code:200,
+            message:'',
+            other:{}
+        }
+    }
+
+}
+
 
 module.exports = {
     respondHandel,

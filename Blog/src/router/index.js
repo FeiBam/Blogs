@@ -5,10 +5,10 @@ import VueRouter from "vue-router";
 
 Vue.use(VueRouter)
 
-//const RouteView = {
-    //name: 'RouteView',
-    //render: (h) => h('router-view')
-//}
+const RouteView = {
+    name: 'RouteView',
+    render: (h) => h('router-view')
+}
 
 const routes = [
     {
@@ -30,7 +30,34 @@ const routes = [
     {
         name:'admin',
         path:'/admin',
-        component:() => import('../layout/AdminLayout')
+        component:() => import('../view/admin/AdminMain'),
+        children: [
+            {
+                name:'Article',
+                path:'Article',
+                component:RouteView,
+                children:[
+                    {
+                        name:'addArticle',
+                        path:'addArticle',
+                        component:() => import('../view/admin/Article/createArticle')
+                    }
+                ]
+            },
+            {
+                name:'Tag',
+                path: 'Tag',
+                component:RouteView,
+                children: [
+                    {
+                        name:'editTag',
+                        path: 'editTag',
+                        component:() => import('../view/admin/Tag/editTag')
+                    }
+                ]
+            }
+
+        ]
     },
     {
         path: '/login',

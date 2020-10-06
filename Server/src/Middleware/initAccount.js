@@ -4,7 +4,7 @@ const AccountService = require('../services/AccountService')
 const { asyncErrCatch } = require('../unit/asyncErrCatch')
 const Config = require('../config/index')
 const BlogDB = require('../db/index')
-const { logger } = require('.//logger')
+const { logger } = require('./logger')
 
 module.exports = async function (ctx) {
     const Transaction = await BlogDB.transaction()

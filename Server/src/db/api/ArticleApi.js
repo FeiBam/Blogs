@@ -4,9 +4,9 @@ const { Article,Account,Tag } = require('../member')
 const ArticleApi = {
     async createArticle(data,Tra){
         return Article.create({
-            name:data.name,
-            introduction:data.introduction,
-            subject:data.subject,
+            Title:data.Title,
+            Introduction:data.Introduction,
+            Subject:data.Subject,
         },{ transaction:Tra })
     },
     async updateArticle(model,data,Tra){
@@ -47,21 +47,27 @@ const ArticleApi = {
     async getArticleById(id,Tra,showDelete = false){
         return Article.findByPk(id,{ transaction:Tra , paranoid:!showDelete })
     },
-    async deleteArticle(model,Tra,force = false){
-        return model.destroy({ transaction:Tra , force:force })
+    async deleteArticle(ArticleModel,Tra,force = false){
+        return ArticleModel.destroy({ transaction:Tra , force:force })
     },
-    async restoreArticle(model,Tra){
-        return model.restore({ transaction:Tra })
+    async restoreArticle(ArticleModel,Tra){
+        return ArticleModel.restore({ transaction:Tra })
     },
-    async addTag(Tag,Tra){
-        return Article.addTag(Tag,{ transaction:Tra })
+    async addTag(ArticleModel,TagModel,Tra){
+        return ArticleModel.addTag(TagModel ,{ transaction:Tra })
     },
-    async removeTag(Tag,Tra){
-        return  Article.removeTag(Tag,{ transaction:Tra })
+    async addTags(ArticleModel,TagsModel,Tra){
+        return ArticleModel.addTags(TagsModel , { transaction:Tra })
     },
-    async getTag(model,Tra){
-        return model.getTags({ transaction:Tra })
+    async removeTag(ArticleModel,TagModel,Tra){
+        return ArticleModel.removeTag(Tag,{ transaction:Tra })
     },
+    async getTag(ArticleModel,Tra){
+        return ArticleModel.getTags({ transaction:Tra })
+    },
+    async addAccount(ArticleModel,AccountModel,Tra){
+        return ArticleModel.addAccount(AccountModel, { transaction:Tra })
+    }
 }
 
 

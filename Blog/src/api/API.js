@@ -11,8 +11,29 @@ const AdminApi = {
     TokenTest:{
         Method: 'GET',
         PATH:'/admin/test'
+    },
+    createArticle:{
+        Method:'POST',
+        PATH:'/admin/'
+    },
+    getAllTag:{
+        Method:'GET',
+        PATH:'/admin/getAllTags'
+    },
+    addTag:{
+        Method:'POST',
+        PATH:'/admin/createTag'
+    },
+    deleteTag:{
+        Method:'POST',
+        PATH:'/admin/deleteTag'
+    },
+    restoreTag:{
+        Method:'POST',
+        PATH:'/admin/restoreTag'
     }
 }
+
 
 const BlogApi  = {
     GetPage:{

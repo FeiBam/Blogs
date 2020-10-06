@@ -7,28 +7,54 @@ const TagApi = require('../db/api/TagApi')
 
 const { UserErrHandel } = require('../unit/errorHandel/errHandel')
 const config = require('../config/index')
-
+const code = require('../config/code')
 const { asyncErrCatch } = require('../unit/asyncErrCatch')
 
 const ArticleService = {
 }
 
 
-ArticleService.getPage = async (ctx,Tra,PageNum) => {
-    const offset = (PageNum - 1) * 5
-    const limit = config.select.blog.pageArticleLimit
-    const [Err,Articles] = await asyncErrCatch(ArticleApi.getArticleByLimitWithAll(Tra,limit,offset))
-    if (Err){
-        throw Err
+ArticleService.createArticle = async (ctx,Tra,ArticleObject) => {
+    try {
+        const Article = {
+            Title:ArticleObject.Title,
+            Introduction:ArticleObject.Introduction,
+            Subject:ArticleObject.Subject
+        }
+        return await ArticleApi.createArticle(Article, Tra)
     }
-    if (Articles.length === 0){
-        UserErrHandel(ctx,404 ,ErrCodeMixin.NOT_FOUND_ERR)
+    catch (e) {
+        throw e
     }
-    return Articles
 }
 
-ArticleService.getArticle = async (ctx,Tra,id,showDelete) => {
-    const [Err,Article] = await asyncErrCatch(ArticleApi.getArticleById(id,Tra,showDelete))
+ArticleService.addTags = async (ctx,Tra,ArticleModel,Tags) => {
+    try{
+        let TagModelArr = []
+        for (let item of Tags) {
+            let TagModel = await TagApi.getTagByName(item.Name,Tra)
+            if (!TagModel){
+                UserErrHandel(ctx,400,code.PARAMS_ERROR,'错误！没有找到相关的Tag' )
+            }
+            TagModelArr.push(TagModel)
+        }
+        return  await ArticleApi.addTags(ArticleModel,TagModelArr,Tra)
+    }catch (e) {
+        throw e
+    }
+}
+
+
+ArticleService.addAccount = async (ctx,Tra,ArticleModel,AccountName) => {
+    try {
+        const AccountModel =  await AccountApi.getAccountByName(AccountName,Tra)
+        if (!Account){
+            UserErrHandel(ctx,400,code.USER_NOT_FOUND,'没有这个管理员！')
+        }
+        return await ArticleApi.addAccount(AccountModel)
+    }catch (e) {
+        throw e
+    }
 }
 
 module.exports = ArticleService

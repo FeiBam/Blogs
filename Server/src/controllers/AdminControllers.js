@@ -1,15 +1,17 @@
 const ArticleService  = require('../services/ArticleService')
 const AccountService = require('../services/AccountService')
+const TagService = require('../services/TagService')
 const BlogDB = require('../db/index')
 
 //DB required
 const config = require('../config/index')
-
+const code  = require('../config/code')
 //config required
 
-const { TokenCache } = require('../app')
 const { respondHandel } = require('../unit/respondHandel')
 const { asyncErrCatch } = require('../unit/asyncErrCatch')
+const { UserErrHandel } = require('../unit/errorHandel/errHandel')
+
 const Jois = require('../unit/Jois')
 const schemas = require('../config/schemas')
 
@@ -22,22 +24,48 @@ function AttributeError(err) {
 const adminControllers = {
 }
 
-adminControllers.createArticle = async (ctx,next) =>{
+/**
+ *
+ * @param ctx
+ * @returns {Promise<void>}
+ */
+
+
+
+adminControllers.createArticle = async (ctx) => {
     const Transaction = await BlogDB.transaction()
     const [Err,CheckedData] = await Jois(schemas.Article,ctx.request.body)
     if (Err){
-        ctx.throw(400,'参数错误!',Err)
+        UserErrHandel(ctx,400,code.PARAMS_ERROR,`参数错误！${err}`)
     }
     try {
-        const ArticleObject = await ArticleService.createArticle(data,Transaction)
-        console.log(ArticleObject)
-        Transaction.commit()
-        respondHandel.success(ctx,ArticleObject,'ok')
+        let ArticleModel = await ArticleService.createArticle(ctx,Transaction,CheckedData)
+        ArticleModel = await ArticleService.addTags(ctx,Transaction,ArticleModel,CheckedData.Tags)
+        ArticleModel = await ArticleService.addAccount(ctx,Transaction,ArticleModel,CheckedData.Creator.Name)
+        await Transaction.commit()
+        respondHandel.success(ctx,ArticleModel,'成功！')
     }
     catch (err) {
         await Transaction.rollback()
         throw err
     }
+}
+
+adminControllers.createTag = async (ctx) => {
+    const Transaction = await BlogDB.transaction()
+    const [Err,CheckedData] = await Jois(schemas.Tag,ctx.request.body)
+    if (Err){
+        UserErrHandel(ctx,400 , code.PARAMS_ERROR,`参数错误！${Err}`)
+    }
+    try {
+        const Tag = await TagService.createTag(ctx,Transaction,CheckedData.TagName)
+        Transaction.commit()
+        respondHandel.success(ctx,Tag,'成功！')
+    }catch (e) {
+        await Transaction.rollback()
+        throw e
+    }
+
 }
 
 adminControllers.getAllArticle = async (ctx) =>{
@@ -51,6 +79,17 @@ adminControllers.getAllArticle = async (ctx) =>{
         await Transaction.rollback()
         throw err
     }
+}
+
+adminControllers.getAllTags = async (ctx) => {
+    const Transaction = await BlogDB.transaction()
+    const ShowDelete = JSON.parse(ctx.params.ShowDelete)
+    const [Err,Tags] = await asyncErrCatch(TagService.getAllTag(ctx,Transaction,ShowDelete))
+    if (Err){
+        throw Err
+    }
+    Transaction.commit()
+    respondHandel.success(ctx,Tags,'ok')
 }
 
 adminControllers.adminLogin = async (ctx) =>{
@@ -72,7 +111,22 @@ adminControllers.adminLogin = async (ctx) =>{
     }
 }
 
-
+adminControllers.deleteTag = async (ctx) => {
+    const Transaction = await BlogDB.transaction()
+    const TagName = ctx.request.body.TagName
+    if (!TagName || TagName === ''){
+        await Transaction.rollback()
+        UserErrHandel(ctx,400,code.PARAMS_ERROR,'没有传递标签名称！')
+    }
+    const Tag = await TagService.deleteTag(ctx,Transaction,TagName,true)
+    await Transaction.commit()
+    respondHandel.success(ctx,Tag,'ok!')
+    try {
+    }catch (e) {
+        await Transaction.rollback()
+        throw e
+    }
+}
 
 
 module.exports = {
