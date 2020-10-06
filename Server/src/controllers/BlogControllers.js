@@ -7,6 +7,7 @@ const BlogDB = require('../db/index')
 const { respondHandel } = require('../unit/respondHandel')
 const { UserErrHandel } = require('../unit/errorHandel/errHandel')
 const { ObjectRemove } = require('../unit/SameObjectRemove')
+import BlogForm from '../form/Blog'
 
 
 
@@ -17,30 +18,12 @@ blogControllers.getPage = async (ctx) => {
         UserErrHandel(ctx,400, ErrCodeMixin.ATTRIBUTE_ERR )
     }
     const PageNum = ctx.params.id
-    const Transaction = await BlogDB.transaction()
-    try {
-        const Articles = await ArticleService.getPage(ctx,Transaction,PageNum)
-        const ObjectRe = {
-            dataValues:{
-                id:'',
-                updatedAt:'',
-                onDelete:'',
-                AccountId:'',
-                Account:{
-                    PassWord:''
-                }
-            }
-        }
-        Articles.forEach(item=>{
-            ObjectRemove(item,ObjectRe)
-        })
-        await Transaction.commit()
-        return respondHandel.success(ctx,Articles,'ok')
+    const BlogForm = new BlogForm()
+    const {Articles,errCode} = await BlogForm.getPage(PageNum)
+    if (errCode) {
+        return respondHandel.AttributeError(ctx,errCode,'error')
     }
-    catch (err) {
-        await Transaction.rollback()
-        throw err
-    }
+    return respondHandel.success(ctx,Articles,'ok')
 }
 
 blogControllers.getArticleTag = async (ctx) => {
