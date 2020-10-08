@@ -14,8 +14,9 @@ module.exports = async (ctx,next) => {
     }
     if (Jwt.verify(ctx.get('Access-Token'),config.secret.Salt,config.secret.JwtHead.alg)){
         const PayLoad = Jwt.GetPayLoad(ctx.get('Access-Token'))
+        console.log('测试！',PayLoad)
         ctx.state.AccountName = PayLoad.Name
         ctx.state.AccountId = PayLoad.id
-        next()
+        await next()
     }
 }

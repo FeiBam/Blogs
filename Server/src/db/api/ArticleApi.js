@@ -65,8 +65,9 @@ const ArticleApi = {
     async getTag(ArticleModel,Tra){
         return ArticleModel.getTags({ transaction:Tra })
     },
-    async addAccount(ArticleModel,AccountModel,Tra){
-        return ArticleModel.addAccount(AccountModel, { transaction:Tra })
+    async setAccount(ArticleModel,AccountModel,Tra){
+        console.log(ArticleModel,AccountModel)
+        return ArticleModel.setAccount(AccountModel , { transaction:Tra })
     }
 }
 

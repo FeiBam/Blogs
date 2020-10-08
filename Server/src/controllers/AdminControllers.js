@@ -36,12 +36,12 @@ adminControllers.createArticle = async (ctx) => {
     const Transaction = await BlogDB.transaction()
     const [Err,CheckedData] = await Jois(schemas.Article,ctx.request.body)
     if (Err){
-        UserErrHandel(ctx,400,code.PARAMS_ERROR,`参数错误！${err}`)
+        UserErrHandel(ctx,400,code.PARAMS_ERROR,`参数错误！${Err}`)
     }
     try {
         let ArticleModel = await ArticleService.createArticle(ctx,Transaction,CheckedData)
-        ArticleModel = await ArticleService.addTags(ctx,Transaction,ArticleModel,CheckedData.Tags)
-        ArticleModel = await ArticleService.addAccount(ctx,Transaction,ArticleModel,CheckedData.Creator.Name)
+        await ArticleService.addTags(ctx,Transaction,ArticleModel,CheckedData.Tags)
+        await ArticleService.setAccount(ctx,Transaction,ArticleModel,CheckedData.Creator.Name)
         await Transaction.commit()
         respondHandel.success(ctx,ArticleModel,'成功！')
     }
@@ -122,6 +122,22 @@ adminControllers.deleteTag = async (ctx) => {
     await Transaction.commit()
     respondHandel.success(ctx,Tag,'ok!')
     try {
+    }catch (e) {
+        await Transaction.rollback()
+        throw e
+    }
+}
+
+adminControllers.restoreTag = async (ctx) => {
+    const Transaction = await BlogDB.transaction()
+    const TagName = ctx.request.body.TagName
+    if (!TagName || TagName === ''){
+        UserErrHandel(ctx,400,code.PARAMS_ERROR,'没有传递标签名称！')
+    }try {
+        let Tag = await TagService.getTag(ctx,Transaction,TagName,true)
+        Tag = await TagService.restoreTag(ctx,Transaction,Tag)
+        await Transaction.commit()
+        return respondHandel.success(ctx,Tag,'ok!')
     }catch (e) {
         await Transaction.rollback()
         throw e

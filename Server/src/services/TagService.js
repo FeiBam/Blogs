@@ -62,6 +62,14 @@ TagService.deleteTag = async (ctx,Tra,Name) => {
         throw e
     }
 }
+TagService.restoreTag = async (ctx,Tra,Model) => {
+    try {
+        return await TagApi.restoreTag(Model, Tra)
+    }
+    catch (e) {
+        throw e
+    }
+}
 
 
 module.exports = TagService

@@ -89,7 +89,7 @@ const TagApi = {
      */
 
     async restoreTag(model,Tra){
-        return  model.restore({ transaction:Tra })
+        return model.restore({ transaction:Tra })
     },
 
     /**

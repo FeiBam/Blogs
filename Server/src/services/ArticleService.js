@@ -45,13 +45,13 @@ ArticleService.addTags = async (ctx,Tra,ArticleModel,Tags) => {
 }
 
 
-ArticleService.addAccount = async (ctx,Tra,ArticleModel,AccountName) => {
+ArticleService.setAccount = async (ctx,Tra,ArticleModel,AccountName) => {
     try {
         const AccountModel =  await AccountApi.getAccountByName(AccountName,Tra)
-        if (!Account){
+        if (!AccountModel){
             UserErrHandel(ctx,400,code.USER_NOT_FOUND,'没有这个管理员！')
         }
-        return await ArticleApi.addAccount(AccountModel)
+        return await ArticleApi.setAccount(ArticleModel,AccountModel,Tra)
     }catch (e) {
         throw e
     }

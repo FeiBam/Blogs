@@ -32,7 +32,7 @@ router.post('/createTag',adminControllers.createTag)
 
 router.post('/deleteTag',adminControllers.deleteTag)
 
-router.post('/restoreTag')
+router.post('/restoreTag',adminControllers.restoreTag)
 
 
 module.exports = {
