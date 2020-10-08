@@ -14,7 +14,7 @@ const AdminApi = {
     },
     createArticle:{
         Method:'POST',
-        PATH:'/admin/'
+        PATH:'/admin/createArticle'
     },
     getAllTag:{
         Method:'GET',

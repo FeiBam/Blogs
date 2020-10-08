@@ -1,7 +1,7 @@
 <template>
     <div>
         <BaseHead v-bind:Title="Title" v-bind:Creator="Creator"></BaseHead>
-        <p class="Article-text">{{Text}}</p>
+        <p class="Article-text">{{ Introduction }}</p>
     </div>
 </template>
 
@@ -17,7 +17,7 @@
                 type:String,
                 default:'我可是标题！'
             },
-            Text:{
+            Introduction:{
                 type:String,
                 default:'我是介绍哦！'
             },

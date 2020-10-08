@@ -18,7 +18,8 @@ const MutationsMixin = {
     setArticles:'setArticles',
     addTag:'addTag',
     forceDeleteTag:'forceDeleteTag',
-    deleteTag:'deleteTag'
+    deleteTag:'deleteTag',
+    restoreTag:'resStoreTag'
 }
 
 const ActionsMixin = {
@@ -28,7 +29,7 @@ const ActionsMixin = {
     getAllTag:'getAllTag',
     deleteTag:'deleteTag',
     forceDeleteTag:'forceDeleteTag',
-    restoreTag:'resStoreTag'
+    restoreTag:'resStoreTag',
 }
 
 export {

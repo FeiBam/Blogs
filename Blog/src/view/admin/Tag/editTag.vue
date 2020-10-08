@@ -6,6 +6,12 @@
                     <a-button @click="drawerVisBale = true" type="primary">
                         添加标签
                     </a-button>
+                    <a-button type="primary" style="margin-left: 10px" @click="()=>{
+                        onLoad = true
+                        getTags(true,true)
+                    }">
+                        重新获取标签
+                    </a-button>
                 </div>
                 <a-table :loading="onLoad" :pagination="{ pageSize: 5 }" :columns="columns" :data-source="data">
                     <a style="cursor: default;color: black" slot="name" slot-scope="text">{{ text }}</a>
@@ -22,7 +28,7 @@
                                 ok-text="确认" cancel-text="取消"
                                 @confirm="HandledDeleteTag(record.name)"
                         >
-                            <a href="javascript:;">删除标签</a>
+                            <a href="javascript:">删除标签</a>
                         </a-popconfirm>
                         <div v-else slot-scope="record">
                             <a-popconfirm
@@ -38,7 +44,7 @@
                                     ok-text="确认"
                                     cancel-text="取消"
                                     title="强制删除标签"
-                                    @confirm="HandledForceDeleteTag(record.name,true)"
+                                    @confirm="HandledDeleteTag(record.name,true)"
                             >
                                 <a>强制删除标签</a>
                             </a-popconfirm>
@@ -122,13 +128,13 @@
             ...mapActions('Admin',{
                 getAllTag:ActionsMixin.getAllTag,
                 addTag:ActionsMixin.addTag,
-                deleteTag:ActionsMixin.deleteTag
+                deleteTag:ActionsMixin.deleteTag,
+                restoreTag:ActionsMixin.restoreTag
             }),
             init(){
                 this.getTags(true)
             },
             async HandledDeleteTag(TagName,force = false){
-                console.log(TagName)
                 const [Err,Tag] = await AsyncErrCatch(this.deleteTag({ TagName:TagName, force:force }))
                 if (Err){
                     throw Err
@@ -139,8 +145,8 @@
                     icon:<a-icon style='color:green' type="smile" />
                 });
             },
-            async getTags(){
-                const [Err,Tags] = await AsyncErrCatch(this.getAllTag(true))
+            async getTags( ShowDelete , force = false ){
+                const [Err,Tags] = await AsyncErrCatch(this.getAllTag({ShowDelete:ShowDelete ,force:force}))
                 if (Err){
                     throw Err
                 }
@@ -148,11 +154,22 @@
                 this.onLoad = false
                 return Tags
             },
-            async HandledRestoreTag(Tag){
-                console.log(Tag)
-            },
-            async HandledForceDeleteTag(Tag){
-                console.log(Tag)
+            async HandledRestoreTag(TagName){
+                try {
+                    const Tag = await this.restoreTag(TagName)
+                    this.$notification.open({
+                        message: `恢复成功！标签名字:${Tag.data.data.Name}`,
+                        duration: 2.5,
+                        icon:<a-icon style='color:green' type="smile" />
+                });
+                }catch (e) {
+                    this.$notification.open({
+                        message: `恢复失败！错误:${e}`,
+                        duration: 2.5,
+                        icon:<a-icon style="color:red" type="close-circle"/>
+                });
+                    throw e
+                }
             },
             async handleAddTag(){
                 const data = await new Promise((resolve) => {
@@ -178,6 +195,11 @@
                 })
                 const [Err,Tag] = await AsyncErrCatch(this.addTag(data.TagName))
                 if (Err){
+                    this.$notification.open({
+                        message:`创建失败了！错误:${Err}`,
+                        duration: 2.5,
+                        icon:<a-icon style="color:red" type="close-circle"/>
+                });
                     throw Err
                 }
                 this.drawerVisBale = false

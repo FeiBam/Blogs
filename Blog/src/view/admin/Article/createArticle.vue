@@ -30,8 +30,8 @@
                                     placeholder="请选择标签"
                                     @change="handleSelect"
                             >
-                                <a-select-option v-for=" item in Tags" v-bind:key="item.id">
-                                    {{ item.Name }}
+                                <a-select-option  v-for=" item in Tags" v-bind:key="item.id">
+                                    <span v-if="!item.isDelete">{{ item.name }}</span>
                                 </a-select-option>
                             </a-select>
                     </a-form-item>
@@ -47,7 +47,7 @@
             <div class="Button-Box">
                 <a-button @click="ArticleEditCurrent -=1" v-if="ArticleEditCurrent !== 0 ">上一步</a-button>
                 <a-button @click="handelNext" v-if="ArticleEditCurrent !== 3 ">下一步</a-button>
-                <a-button v-if="ArticleEditCurrent === 3">确认！</a-button>
+                <a-button @click="handleSubmit" v-if="ArticleEditCurrent === 3">确认！</a-button>
             </div>
         </template>
     </AdminContentLayout>
@@ -56,7 +56,7 @@
 <script>
     import { mapActions,mapState } from 'vuex'
     import { ActionsMixin as BlogActionsMixin } from '../../../store/blog/Mixin'
-    import { DataMixin as AdminDataMixin } from '../../../store/admin/Minxin'
+    import { DataMixin as AdminDataMixin , ActionsMixin as AdminActionMixin} from '../../../store/admin/Minxin'
     import AdminContentLayout from "../../../layout/AdminContentLayout";
     import ArticleSubjectMain from "../../blog/Article/ArticleSubjectMain";
     export default {
@@ -73,35 +73,23 @@
                 ArticleTags:[],
                 ArticleCreator:{},
                 ArticleEditCurrent:0,
+                ArticleObject:{},
                 FormDecorator:{
                     Title:['Title',{ rules:[{ required: true , message:'请输入文章标题' },{ max:18 ,message: '标题不可超过18个字'}]}],
                     Introduce:[ 'Introduce',{ rules:[{ required: true , message:'请输入文章介绍！'}]}],
                     Tag:['Tags',{ rules :[{ required: true , message:'请选择至少一个标签'}]}],
                     Subject:''
                 },
-                Tags:[
-                    {
-                        id:0,
-                        Name:'python',
-                        Target:'python'
-                    },
-                    {
-                        id:1,
-                        Name:'JavaScript',
-                        Target:'JavaScript'
-                    },
-                    {
-                        id:2,
-                        Name:'水',
-                        Target: '水'
-                    }
-                ],
                 form: this.$form.createForm(this, { name: 'createArticle' }),
             }
         },
         methods:{
             ...mapActions('Blog',{
-                PreviewArticle:BlogActionsMixin.PreviewArticle
+                PreviewArticle:BlogActionsMixin.PreviewArticle,
+            }),
+            ...mapActions('Admin',{
+                getAllTags:AdminActionMixin.getAllTag,
+                createArticle:AdminActionMixin.addArticle
             }),
             handelNext(e){
                 e.preventDefault();
@@ -131,37 +119,51 @@
                             this.$message.warn('请编写你的文章！')
                         }
                         else {
-                            const ArticleObject = {}
-                            ArticleObject['Title'] = this.ArticleTitle
-                            ArticleObject['Text'] = this.ArticleIntroduce
-                            ArticleObject['Subject'] = this.ArticleSubject
-                            ArticleObject['Creator'] = {
+                            const Time = new Date()
+                            this.ArticleObject ={}
+                            this.ArticleObject['Title'] = this.ArticleTitle
+                            this.ArticleObject['Introduction'] = this.ArticleIntroduce
+                            this.ArticleObject['Subject'] = this.ArticleSubject
+                            this.ArticleObject['Creator'] = {
                                 Name:this.UserName,
+                                Date:`${Time.getFullYear()}-${Time.getMonth() + 1}-${Time.getDate()}`
                             }
-                            ArticleObject['Tags'] = this.ArticleTags
-                            this.PreviewArticle(ArticleObject)
+                            this.ArticleObject['Tags'] = this.ArticleTags.map(item=>{
+                                return {
+                                    Name:item.name
+                                }
+                            })
+                            this.PreviewArticle(this.ArticleObject)
                             this.ArticleEditCurrent +=1
                         }
                         break;
                 }
             },
             handleSelect(value){
-                const Tags = []
+                const addTagArr = []
                 for (let SelectTagId of value){
                     for (let OrginTag of this.Tags){
                         if (SelectTagId === OrginTag.id){
-                            Tags.push(OrginTag)
+                            if (!OrginTag.isDelete){
+                                addTagArr.push(OrginTag)
+                            }
                         }
                     }
                 }
-                this.ArticleTags = Tags
+                this.ArticleTags = addTagArr
             },
-            handleSubmit(){
-
+            async handleSubmit(){
+                const Article = await this.createArticle(this.ArticleObject)
+                this.$message.success('创建成功！')
+                console.log(Article)
+                return Article
             }
         },
         computed:{
             ...mapState('Admin',AdminDataMixin)
+        },
+        mounted() {
+            this.getAllTags({ShowDelete:true,force:false})
         }
     }
 </script>
@@ -172,7 +174,7 @@
         display: flex;flex-flow: column;
     }
     .Form-Box{
-        margin: 40px auto 0px;
+        margin: 40px auto 0;
         max-width: 750px;
     }
     .Button-Box{

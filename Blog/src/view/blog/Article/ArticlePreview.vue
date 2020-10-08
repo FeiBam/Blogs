@@ -1,7 +1,7 @@
 <template>
     <BaseContent>
         <div class="Article-Main">
-            <ArticleHead v-bind:Title="Title" v-bind:Text="Text" v-bind:Creator="Creator"></ArticleHead>
+            <ArticleHead v-bind:Title="Title" v-bind:Introduction="Introduction" v-bind:Creator="Creator"></ArticleHead>
             <div class="ReadMore">
                 <a @click="viewArticle()"><i style="margin-right: 5px" class="fas fa-book-open fa-fw"></i>阅读全文</a>
             </div>
@@ -28,7 +28,7 @@
             Title:{
                 type:String
             },
-            Text:{
+            Introduction:{
                 type:String
             },
             Creator:{
@@ -89,26 +89,5 @@
         background-color: #1bc3fb;
         vertical-align: middle;
         border-radius: 6px;
-    }
-    .ArticlePreview-Tag{
-        background-color: rgba(231,231,231,.5);
-        margin-top: 16px;
-        margin-bottom: -32px;
-        margin-left: -24px;
-        position: relative;
-        width: calc(100% + 3 * 16px);
-        padding: 8px 24px;
-        line-height: 1.7;
-        word-spacing: 8px;
-    }
-    .ArticlePreview-Tag > a {
-        margin-right: 10px;
-        color: rgba(51,51,51,.7);
-    }
-    .ArticlePreview-Tag > a:hover{
-        color: darkorange;
-    }
-    .ArticlePreview-Tag > a > i {
-        margin-right: 4px;
     }
 </style>

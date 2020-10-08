@@ -2,12 +2,12 @@ import Router from "../router";
 import Store from '../store/index'
 import Request from '../api/index'
 
-const BlockList = ['admin']
 
 
 
 Router.beforeEach((to,from,next) =>{
-    if (BlockList.includes(to.name)){
+    if (to.fullPath.split('/')[1] === 'admin'){
+        console.log(to)
         if (Store.state.Admin.AccessToken === ''){
             Router.push('/login')
             next()

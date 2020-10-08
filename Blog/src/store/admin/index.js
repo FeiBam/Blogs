@@ -54,26 +54,28 @@ const AdminModel = {
                 name:Tag.Name,
                 createAt:Tag.createdAt,
             }
-            if (Tag.onDelete){
-                PushObject['isDelete'] = true
-            }
-            else {
-                PushObject['isDelete'] = false
-            }
+            PushObject['isDelete'] = !!Tag.onDelete;
             state.Tags.push(PushObject)
         },
         [MutationsMixin.forceDeleteTag](state , TagName){
             for (let item of state.Tags){
-                if (item.Name === TagName){
-                    state.Tags.splice(state.Tags.indexOf(item),0)
+                if (item.name === TagName){
+                    state.Tags.splice(state.Tags.indexOf(item),1)
                     return
                 }
             }
         },
         [MutationsMixin.deleteTag]( state , TagName){
             for (let item of state.Tags){
-                if (item.Name === TagName){
+                if (item.name === TagName){
                     state.Tags[state.Tags.indexOf(item)].isDelete = true
+                }
+            }
+        },
+        [MutationsMixin.restoreTag](state , TagName){
+            for (let item of state.Tags){
+                if (item.name === TagName){
+                    state.Tags[state.Tags.indexOf(item)].isDelete = false
                 }
             }
         }
@@ -94,15 +96,19 @@ const AdminModel = {
                 commit(MutationsMixin.setJwsHead, Jwt.GetHead(AccessToken))
             return res
         },
-        async [ActionsMixin.addArticle]( ArticleObject ){
+        async [ActionsMixin.addArticle]( { commit } ,ArticleObject ){
             const  [err,res] = await AsyncErrCatch(Request.createArticle( ArticleObject ))
             if (err){
                 throw err
             }
+            await commit('Blog/addArticle',ArticleObject)
             return res
         },
-        async [ActionsMixin.getAllTag]({ commit,state }, ShowDelete ){
-            const [err,res] = await AsyncErrCatch(Request.getAllTag(ShowDelete))
+        async [ActionsMixin.getAllTag]({ commit,state }, Params ){
+            if (state.Tags.length && Params.force !== true){
+                return
+            }
+            const [err,res] = await AsyncErrCatch(Request.getAllTag(Params.ShowDelete))
             if (err){
                 throw err
             }
@@ -121,11 +127,23 @@ const AdminModel = {
             return Tag
         },
         async [ActionsMixin.deleteTag]( { commit } , Params){
-            const [Err,Tag] = await AsyncErrCatch(Request.deleteTag(Params.TagName,Params.force))
+            const [Err,Res] = await AsyncErrCatch(Request.deleteTag(Params.TagName,Params.force))
             if (Err){
                 throw Err
             }
-            await commit(MutationsMixin.forceDeleteTag,Tag.data.data.Name)
+            if(Params.force){
+                await commit(MutationsMixin.forceDeleteTag,Res.data.data.Name)
+                return Res
+            }
+            await commit(MutationsMixin.deleteTag,Res.data.data.Name)
+            return Res
+        },
+        async [ActionsMixin.restoreTag]( { commit } ,TagName ){
+                const [Err,Tag] = await AsyncErrCatch(Request.restoreTag(TagName))
+            if (Err){
+                throw Err
+            }
+            await commit(MutationsMixin.restoreTag,Tag.data.data.Name)
             return Tag
         }
     }

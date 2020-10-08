@@ -58,5 +58,15 @@ request.deleteTag = function (TagName,force) {
     })
 }
 
+request.restoreTag = function (TagName) {
+    return axios.request({
+        method:AdminApi.restoreTag.Method,
+        url:AdminApi.restoreTag.PATH,
+        data:{
+            TagName:TagName
+        }
+    })
+}
+
 
 export default request

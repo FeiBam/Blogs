@@ -4,7 +4,7 @@
                 v-for="item in Articles"
                 v-bind:key="item.id"
                 v-bind:Title="item.Title"
-                v-bind:Text = "item.Text"
+                v-bind:Introduction = "item.Introduction"
                 v-bind:Tag = "item.Tag"
                 v-bind:Creator = "item.Creator"
                 v-bind:ArticleId="item.id"
@@ -25,7 +25,7 @@
                     {
                         id:0,
                         Title:'测试！',
-                        Text:'我才是预览！！',
+                        Introduction:'我才是预览！！',
                         Creator:{
                             Name:'FeiBam',
                             Date:'2020-09-30'
@@ -35,7 +35,7 @@
                     {
                         id:1,
                         Title:'测试！',
-                        Text:'我才是预览！！',
+                        Introduction:'我才是预览！！',
                         Creator:{
                             Name:'FeiBam',
                             Date:'2020-09-30'
@@ -45,7 +45,7 @@
                     {
                         id:2,
                         Title:'测试！',
-                        Text:'我又回来辣！！铲屎堆屎结束后！终于重新整好了！',
+                        Introduction:'我又回来辣！！铲屎堆屎结束后！终于重新整好了！',
                         Creator:{
                             Name:'FeiBam',
                             Date:'2020-09-30'
