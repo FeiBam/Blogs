@@ -10,7 +10,10 @@ const config = require('../config/index')
 const code = require('../config/code')
 const { asyncErrCatch } = require('../unit/asyncErrCatch')
 
+
+
 const ArticleService = {
+
 }
 
 
@@ -38,7 +41,7 @@ ArticleService.addTags = async (ctx,Tra,ArticleModel,Tags) => {
             }
             TagModelArr.push(TagModel)
         }
-        return  await ArticleApi.addTags(ArticleModel,TagModelArr,Tra)
+        return await ArticleApi.addTags(ArticleModel,TagModelArr,Tra)
     }catch (e) {
         throw e
     }
@@ -56,5 +59,6 @@ ArticleService.setAccount = async (ctx,Tra,ArticleModel,AccountName) => {
         throw e
     }
 }
+
 
 module.exports = ArticleService

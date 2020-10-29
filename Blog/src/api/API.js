@@ -1,6 +1,6 @@
 
 
-const Host = process.env.NODE_ENV !== 'development' ? 'http://blog.feibam.club:8000/' : 'http://127.0.0.1:8000';
+const Host = process.env.NODE_ENV !== 'development' ? 'https://blog.feibam.club:8000/' : 'http://127.0.0.1:8000';
 
 
 const AdminApi = {

@@ -73,7 +73,7 @@ adminControllers.getAllArticle = async (ctx) =>{
     try {
         const ArticleObject = await ArticleService.getArticles(null,Transaction,true)
         await Transaction.commit()
-        respondHandel.success(ctx,ArticleObject,'ok')
+        return respondHandel.success(ctx,ArticleObject,'ok')
     }
     catch (err) {
         await Transaction.rollback()
@@ -89,7 +89,7 @@ adminControllers.getAllTags = async (ctx) => {
         throw Err
     }
     Transaction.commit()
-    respondHandel.success(ctx,Tags,'ok')
+    return respondHandel.success(ctx,Tags,'ok')
 }
 
 adminControllers.adminLogin = async (ctx) =>{
@@ -103,7 +103,7 @@ adminControllers.adminLogin = async (ctx) =>{
         await Transaction.commit()
         ctx.set('Access-Token',AccessToken)
         ctx.set('Access-Control-Expose-Headers','Access-Token')
-        respondHandel.success(ctx,'','ok')
+        return respondHandel.success(ctx,'','ok')
     }
     catch (e) {
         await Transaction.rollback()
@@ -118,11 +118,12 @@ adminControllers.deleteTag = async (ctx) => {
         await Transaction.rollback()
         UserErrHandel(ctx,400,code.PARAMS_ERROR,'没有传递标签名称！')
     }
-    const Tag = await TagService.deleteTag(ctx,Transaction,TagName,true)
-    await Transaction.commit()
-    respondHandel.success(ctx,Tag,'ok!')
     try {
-    }catch (e) {
+        const Tag = await TagService.deleteTag(ctx,Transaction,TagName,true)
+        await Transaction.commit()
+        return respondHandel.success(ctx,Tag,'ok!')
+    }
+    catch (e) {
         await Transaction.rollback()
         throw e
     }
@@ -133,7 +134,8 @@ adminControllers.restoreTag = async (ctx) => {
     const TagName = ctx.request.body.TagName
     if (!TagName || TagName === ''){
         UserErrHandel(ctx,400,code.PARAMS_ERROR,'没有传递标签名称！')
-    }try {
+    }
+    try {
         let Tag = await TagService.getTag(ctx,Transaction,TagName,true)
         Tag = await TagService.restoreTag(ctx,Transaction,Tag)
         await Transaction.commit()

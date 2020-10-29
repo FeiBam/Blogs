@@ -8,11 +8,11 @@
             <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
                 <a-sub-menu>
                     <span slot="title"><i style="margin-right: 10px" class="fas fa-book-open"></i><span v-show="!this.MenuHidden">文章管理</span></span>
-                    <a-menu-item @click="()=>{this.$router.push({name:'addArticle'})}">
+                    <a-menu-item @click="()=>{ this.$router.push({ name:'addArticle' }) }">
                         <a-icon type="plus-circle" />
                         <span>添加文章</span>
                     </a-menu-item>
-                    <a-menu-item>
+                    <a-menu-item @click="()=>{ this.$router.push({ name:'editArticle' }) }">
                         <i class="fas fa-edit"></i>
                         <span>修改文章</span>
                     </a-menu-item>
@@ -29,7 +29,7 @@
                     </a-menu-item>
                 </a-sub-menu>
                 <a-sub-menu>
-                    <span slot="title"><i style="margin-right: 10px" class="fas fa-user-shield"></i><span v-show="!this.MenuHidden">标签管理</span></span>
+                    <span slot="title"><i style="margin-right: 10px" class="fas fa-user-shield"></i><span v-show="!this.MenuHidden">账户管理</span></span>
                     <a-menu-item>
                         <a-icon type="plus-circle" />
                         <span>添加管理员</span>
@@ -71,7 +71,7 @@
         },
         computed:{
             ...mapState('Admin',DataMixin)
-        }
+        },
     }
 </script>
 

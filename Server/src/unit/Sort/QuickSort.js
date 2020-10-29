@@ -29,10 +29,7 @@ function QuickShort(Arr,left,right) {
 }
 
 function Main(Arr) {
-    const start = Date.now()
     QuickShort(Arr , 0 , Arr.length - 1)
-    const end = Date.now() - start
-    console.log(`UseTime : ${end}ms`)
     return Arr
 }
 

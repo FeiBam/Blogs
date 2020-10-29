@@ -13,7 +13,8 @@ const AdminModel = {
         JwsHead:'',
         MenuHidden:false,
         Tags:[],
-        Articles:[]
+        Articles:[],
+        EditArticleData:{}
     }),
     getters:{
 

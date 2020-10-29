@@ -13,6 +13,7 @@ const { TokenCache } = require('../app')
 const config = require('../config/index')
 const AccountService = {}
 
+
 AccountService.Login = async (ctx,Tra,UserName,Password) => {
     try {
         if (ctx.get('Access-Token') !== '' || ctx.get('Access-Token')){

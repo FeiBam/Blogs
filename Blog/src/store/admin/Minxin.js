@@ -3,7 +3,8 @@ const DataMixin = {
     UserName: state => state.Name,
     Avatar: state => state.Avatar,
     MenuHidden: state => state.MenuHidden,
-    Tags: state => state.Tags
+    Tags: state => state.Tags,
+    EditArticleData:state => state.EditArticleData
 }
 
 const MutationsMixin = {

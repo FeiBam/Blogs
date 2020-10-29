@@ -155,7 +155,6 @@
             async handleSubmit(){
                 const Article = await this.createArticle(this.ArticleObject)
                 this.$message.success('创建成功！')
-                console.log(Article)
                 return Article
             }
         },

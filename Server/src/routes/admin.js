@@ -17,8 +17,8 @@ router.post('/login',adminControllers.adminLogin)
 
 //
 
-router.get('/test',async (ctx,next)=>{
-    respondHandel.success(ctx , '' , 'Ok!')
+router.get('/test',async (ctx,next) =>{
+    await respondHandel.success(ctx , '' , 'Ok!')
     next()
 })
 
@@ -33,6 +33,8 @@ router.post('/createTag',adminControllers.createTag)
 router.post('/deleteTag',adminControllers.deleteTag)
 
 router.post('/restoreTag',adminControllers.restoreTag)
+
+router.get('/ArticlePage/:PageNum',adminControllers.getAllArticle)
 
 
 module.exports = {

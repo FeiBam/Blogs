@@ -41,6 +41,11 @@ const routes = [
                         name:'addArticle',
                         path:'addArticle',
                         component:() => import('../view/admin/Article/createArticle')
+                    },
+                    {
+                        name: 'editArticle',
+                        path: 'editArticle',
+                        component:() => import('../view/admin/Article/editArticle')
                     }
                 ]
             },
