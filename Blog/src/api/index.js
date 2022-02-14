@@ -1,16 +1,8 @@
 import axios from 'axios'
 import { AdminApi,BlogApi,Host } from './API'
-import Store from '../store/index'
-
-
 
 axios.defaults.baseURL = Host
 axios.defaults.timeout = 3000
-
-axios.interceptors.request.use(config => {
-    config.headers['Access-Token'] = Store.state.Admin.AccessToken
-    return config
-})
 
 
 const request = {}

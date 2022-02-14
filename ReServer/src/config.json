@@ -1,0 +1,8 @@
+{
+    "Article":{
+        "ArticlePath":"./Articles"
+    },
+    "Page":{
+        "ArticleLimit":5
+    }
+}

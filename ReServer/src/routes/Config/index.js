@@ -4,13 +4,6 @@ const Router = new KoaRouter()
 
 
 
-Router.get('/ArticleNum',(ctx)=>{
-
-})
-
-
-
-
 
 
 module.exports = Router

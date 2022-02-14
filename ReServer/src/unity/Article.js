@@ -5,21 +5,25 @@ class ArticleModel{
     #Article_Json
     #need_update;
     constructor(title = '',Introduction = '',Tags = [],Subject = '') {
-        this.title = title
+        this.Title = title
         this.Introduction = Introduction
         this.Tags = Tags
         this.Subject = Subject
         this.create_At = new Date().getTime()
         this.#need_update = true
         this.#Article_Json = null
+        this.lang = null
+        this.link = {}
     }
     format_form_json(Json){
         const JsonObject = JSON.parse(Json)
-        this.set_title(JsonObject.title)
+        this.set_title(JsonObject.Title)
         this.set_Introduction(JsonObject.Introduction)
         this.set_Tags(JsonObject.Tags)
         this.set_Subject(JsonObject.Subject)
         this.set_create_At(JsonObject.create_At)
+        this.setID(JsonObject.id)
+        this.setLang(JsonObject.lang)
         this.#Article_Json = Json
         this.#need_update = false
         return this
@@ -30,7 +34,7 @@ class ArticleModel{
     }
     set_title(title){
         this.#need_update = true
-        this.title = title
+        this.Title = title
         return this
     }
     set_Introduction(Introduction){
@@ -76,8 +80,28 @@ class ArticleModel{
         }
         return this.#Article_Json
     }
+    getLang(){
+        return this.lang
+    }
+    setLang(lang){
+        this.lang = lang
+    }
+    getID(){
+        return this.id
+    }
+    setID(id){
+        this.id = id
+    }
     need_update(){
         return this.#need_update
+    }
+    setOhterLangArticle(lang,ArticleID){
+        if(this.link.hasOwnProperty(lang)) throw Error('Already have this lang Article')
+        this.link[lang] = ArticleID
+    }
+    getOhterLangArticle(lang){
+        if(!this.link.hasOwnProperty(lang)) return false
+        return this.link[lang]
     }
 }
 
@@ -85,17 +109,14 @@ class ArticlesControl{
     #Articles_Path;
     #private_articles_tree
     #Article_Class
-    constructor(path,ArticleClass) {
-        this.#Article_Class = ArticleClass
+    constructor(path) {
+        this.#Article_Class = ArticleModel
         this.#Articles_Path = path
         this.#private_articles_tree = {}
         this.Need_Update = false
         if (!fs.existsSync(path)){
             fs.mkdirSync(path)
         }
-    }
-    mixin(ArticleModel){
-
     }
     getArticles_Tree(){
         return this.#private_articles_tree
@@ -111,6 +132,8 @@ class ArticlesControl{
     }
     async #Update_Tree(Lang,ArticleID,Article){
         const ArticleCreateDate = Article.get_ArticleCreateDate()
+        Article.setID(ArticleID)
+        Article.setLang(Lang)
         this.#private_articles_tree[Lang].index += 1
         this.#private_articles_tree[Lang][ArticleID] = {
             Article:Article,
@@ -157,11 +180,16 @@ class ArticlesControl{
         return this
     }
     async createArticle(lang,...args){
+        if(!lang){
+            throw new Error('You need Set Article Language')
+        }
         this.Need_Update = true
         await this.getAll()
+        if(!this.hasLang(lang)){
+            this.newLang(lang)
+        }
         const ArticleID = this.#private_articles_tree[lang].index
         if (args.length === 1 && args[0] instanceof this.#Article_Class){
-            console.log(1)
             await this.#Update_Tree(lang,ArticleID,args[0])
         }
         else {
@@ -180,9 +208,37 @@ class ArticlesControl{
     }
     async getArticleNumByLang(lang){
         await this.getAll()
-        return this.#private_articles_tree[lang].index
+        return this.#private_articles_tree[lang]
+    }
+    hasLang(lang){
+        for(let havedLang of Object.keys(this.#private_articles_tree)){
+            if (havedLang === lang){
+                return true
+            }
+        }
+        return false
+    }
+    async newLang(lang){
+        fs.mkdirSync(`${this.#Articles_Path}/${lang}`)
+        this.#onLang(lang)
+        return true
+    }
+    LinkOtherLangArticle(selfArticle,targeArticle){
+        selfArticle.setOhterLangArticle(targeArticle.lang,targeArticle.id)
+        targeArticle.setOhterLangArticle(selfArticle.lang,selfArticle.id)
+    }
+    getOtherLangArticle(lang,Article){
+        const otherLangeArticle = await this.getArticleByLangAndId(Article.getOhterLangArticle(lang),lang)
+        return otherLangeArticle
+    }
+    static Mixin(FuncName,Call,targetClass){
+        if(targetClass[FuncName]) throw Error('the class already have this function')
+        targetClass[FuncName] = Call
     }
 }
+
+
+
 
 module.exports = {
     ArticleModel,

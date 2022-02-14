@@ -1,9 +1,9 @@
 <template>
     <BaseContent>
         <div class="Article-Main">
-            <BaseHead :Title="'友链'" :creator="{Name:'FeiBam',Date:'2021-4-4'}">
+            <BaseHead :Title="$T('friendLink')" :creator="{Name:'FeiBam',Date:'2021-4-4'}">
             </BaseHead>
-            <h3 style="color: #04bbf8;font-size: 21px;margin-top: 1.5em;margin-bottom: 1em"><i class="el-icon-link"></i>朋友们</h3>
+            <h3 style="color: #04bbf8;font-size: 21px;margin-top: 1.5em;margin-bottom: 1em"><i class="el-icon-link"></i>{{$T('friend')}}</h3>
             <div class="LinkContainer">
                 <template v-for="item of FriendLink">
                     <FriendLinkItem
@@ -35,7 +35,7 @@ export default {
                 {
                     id:0,
                     Link:'https://blw.moe/',
-                    FriendImg:'https://blog.blw.moe/wp-content/uploads/2020/11/photo_2020-08-27_15-07-48-300x300.jpg',
+                    FriendImg:'https://blw.moe/juan_head55.png',
                     FriendName:'派兹'
                 },
                 {
@@ -47,7 +47,7 @@ export default {
                 {
                     id:2,
                     Link:'https://walkedby.com/',
-                    FriendImg:'https://walkedby.com/images/avator_t.webp',
+                    FriendImg:'https://walkedby.com/favicon.jpg',
                     FriendName:'戈登'
                 }
 
@@ -56,33 +56,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-.LinkContainer{
-    display: flex;
-    transition: 0.2s;
-}
-@media screen and (max-width: 786px){
-    .LinkContainer{
-        flex-flow: wrap;
-    }
-}
-@media screen and (max-width: 600px){
-    .LinkContainer>a{
-        width: 100%;
-        border-radius: 0;
-        margin: 0 4px;
-    }
-    .LinkContainer>a:hover{
-        border-radius: 12px;
-        margin: 10px;
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,.1), 0 4px 8px 0 rgba(0,0,0,.1), 0 8px 16px 0 rgba(0,0,0,.1), 0 16px 32px 0 rgba(0,0,0,.1), 0 32px 64px 0 rgba(0,0,0,.1);
-    }
-    a:first-of-type{
-        border-radius: 12px 12px 0 0
-    }
-    a:last-of-type{
-        border-radius: 0 0 12px 12px
-    }
-}
-</style>

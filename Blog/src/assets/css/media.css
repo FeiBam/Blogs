@@ -15,7 +15,7 @@
         margin: 2.5rem auto 0 auto
     }
     .Avatar-Content{
-        background-color: #fff;
+        background-color: unset;
         border-radius:0 ;
         box-shadow: none;
         transition: all .25s ease;
@@ -30,8 +30,6 @@
     .blog-main-content {
         flex-flow: column;
     }
-    .Base-Content-Main{
-    }
 }
 
 
@@ -41,5 +39,33 @@
     }
     .ArticleEdit-MainBox >  div {
         width: 100% !important;
+    }
+    .Container{
+        width: calc(100%/2 - 16px);
+        flex-direction: row;
+    }
+    .avatar{
+        margin: 16px;
+    }
+    .LinkContainer{
+        flex-flow: wrap;
+    }
+}
+@media screen and (max-width: 600px){
+    .LinkContainer>a{
+        width: 100%;
+        border-radius: 0;
+        margin: 0 4px;
+    }
+    .LinkContainer>a:hover{
+        border-radius: 12px;
+        margin: 10px;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,.1), 0 4px 8px 0 rgba(0,0,0,.1), 0 8px 16px 0 rgba(0,0,0,.1), 0 16px 32px 0 rgba(0,0,0,.1), 0 32px 64px 0 rgba(0,0,0,.1);
+    }
+    a:first-of-type{
+        border-radius: 12px 12px 0 0
+    }
+    a:last-of-type{
+        border-radius: 0 0 12px 12px
     }
 }

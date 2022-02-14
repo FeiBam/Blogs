@@ -15,7 +15,8 @@ const BlogModel = {
         AllPage:0,
         NowPage:0,
         ArticleNum:0,
-        isLoad:true
+        isLoad:true,
+        Lang:''
     }),
     getters:{
     },
@@ -27,11 +28,15 @@ const BlogModel = {
             state.Tags = Tags
         },
         [MutationsMixin.setPageInfo](state , infoData){
-            state.AllPage = infoData.PageNum
+            if(infoData.ArticleNum < infoData.PageArticleLimit) state.AllPage = 1
+            if((infoData.ArticleNum % infoData.PageArticleLimit) !== 0) state.AllPage = Number((infoData.ArticleNum / infoData.PageArticleLimit).toFixed()) + 1
+            if((infoData.ArticleNum % infoData.PageArticleLimit) === 0) state.AllPage = infoData.ArticleNum / infoData.PageArticleLimit
             state.ArticleLimit = infoData.PageArticleLimit
             state.ArticleNum = infoData.ArticleNum
+            console.log( Number((infoData.ArticleNum / infoData.PageArticleLimit).toFixed()) + 1)
         },
         [MutationsMixin.ViewArticle](state , ArticleId){
+            console.log(state.Articles,ArticleId)
             state.ViewArticleData = state.Articles[ArticleId]
         },
         [MutationsMixin.clearPage](state){
@@ -47,18 +52,18 @@ const BlogModel = {
             state.isLoad = true
             await commit(MutationsMixin.clearPage)
             if (PageNum > state.AllPage) throw new Error('PageNumErr')
-            const [err, Articles] = await AsyncErrCatch(request.GetPage(PageNum))
+            const [err, res] = await AsyncErrCatch(request.GetPage(PageNum))
             if (err) {
-                state.isLoad = false
                 throw err
             }
             state.isLoad = false
-            Articles.data.data.forEach(item=>{
+            res.data.Articles.forEach(item=>{
                 item['Creator'] = {
                     Name:item['Account'].Name,
-                    Date:item['createdAt']
+                    Date:item.createDate
                 }
-                Reflect.deleteProperty(item,'Account')
+                item = {...item,...item.Article}
+                item.id +=1
                 commit(MutationsMixin.addArticle,item)
             })
             return true
@@ -66,7 +71,7 @@ const BlogModel = {
         async [ActionsMixin.GetPageInfo]( { commit} ){
             const [err,PageInfo] = await AsyncErrCatch(request.getPageInfo())
             if(err) throw err
-            commit(MutationsMixin.setPageInfo,PageInfo.data.data)
+            commit(MutationsMixin.setPageInfo,PageInfo.data)
             return true
         },
     }

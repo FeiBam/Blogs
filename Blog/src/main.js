@@ -8,9 +8,19 @@ import 'mavon-editor/dist/css/index.css'
 import '../public/fontawesome-free-5.14.0-web/css/all.min.css'
 import '../src/assets/css/blog.css'
 import '../src/assets/css/media.css'
+
+import { setTitle } from './utils/SetTitle'
+import i18n from './i18n/i18n.js'
+
 //import './api/initData'
 //import './Permission'
-import { setTitle } from './utils/SetTitle'
+
+
+Vue.prototype.$i18n = i18n
+
+Vue.prototype.$T = function(tag){
+  return this.$i18n.$T(tag)
+}
 
 Vue.config.productionTip = false
 
@@ -38,3 +48,4 @@ new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
+

@@ -106,7 +106,7 @@ export default {
     margin-bottom: -32px;
     margin-left: -24px;
     position: relative;
-    width: calc(100% + 3 * 16px);
+    width: 100%;
     padding: 8px 24px;
     line-height: 1.7;
     word-spacing: 8px;
@@ -120,7 +120,6 @@ export default {
 
 
 .is-loading {
-
 
     /* 以下代码实现背景动画效果 */
     animation: loading 1.4s ease infinite;

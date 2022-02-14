@@ -9,9 +9,9 @@
         </div>
         <div class="menu">
             <div class="menu-flex">
-                <a @click="$router.push({name:'index'})" v-bind:class="Show() ? 'menu-tag-active' : 'menu-tag-unactive'" class="menu-tag"><i class="fa fa-rss fa-fw"></i>文章</a>
-                <a @click="$router.push('/FriendLinks')" v-bind:class="this.$route.name === 'FriendLinks' ? 'menu-tag-active' : 'menu-tag-unactive'" class="menu-tag"><i class="fas fa-link fa-fw"></i>友链</a>
-                <a v-bind:class="this.$route.name === 'About' ? 'menu-tag-active' : 'menu-tag-unactive'" class="menu-tag"><i class="fa fa-info-circle fa-fw"></i>关于</a>
+                <a @click="$router.push({name:'index'})" v-bind:class="Show() ? 'menu-tag-active' : 'menu-tag-unactive'" class="menu-tag"><i class="fa fa-rss fa-fw"></i>{{ $T('article')}}</a>
+                <a @click="$router.push('/FriendLinks')" v-bind:class="this.$route.name === 'FriendLinks' ? 'menu-tag-active' : 'menu-tag-unactive'" class="menu-tag"><i class="fas fa-link fa-fw"></i>{{ $T('friendLink')}}</a>
+                <a v-bind:class="this.$route.name === 'About' ? 'menu-tag-active' : 'menu-tag-unactive'" class="menu-tag"><i class="fa fa-info-circle fa-fw"></i>{{$T('about')}}</a>
             </div>
         </div>
         <div class="cover-img">

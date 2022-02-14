@@ -36,21 +36,21 @@ const AdminApi = {
 
 
 const BlogApi  = {
-    GetPage:{
-        Method:'Get',
-        PATH:'/blog/page'
-    },
     GetPageInfo:{
         Method:'GET',
-        PATH:'blog/getPageInfo'
+        PATH:'/page/getPageInfo'
     },
     getArticleById:{
         Method:'GET',
-        PATH:'/blog/Article'
+        PATH:'/page/Article'
     },
     getArticleTags:{
         Method:'GET',
-        PATH:'/blog/ArticleTag'
+        PATH:'/page/ArticleTag'
+    },
+    GetPage:{
+        Method:'GET',
+        PATH:'/page/Aritcles'
     }
 }
 
