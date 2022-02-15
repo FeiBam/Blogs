@@ -1,6 +1,12 @@
 <template>
     <div>
-        <BaseHead v-bind:ArticleID="ArticleID" v-bind:Title="Title" v-bind:Creator="Creator"></BaseHead>
+        <div>
+            <BaseHead v-bind:ArticleID="ArticleID" v-bind:Title="Title" v-bind:Creator="Creator">
+                <template slot="head">
+                    <a style="cursor:poniter;"><i class="fa fa-globe-africa"></i></a>
+                </template>
+            </BaseHead>
+        </div>
         <p class="Article-text">{{ Introduction }}</p>
     </div>
 </template>
@@ -30,6 +36,14 @@
             },
             ArticleID:{
                 type:Number
+            }
+        },
+        methods:{
+            openLangSelect(){
+
+            },
+            changeArticleLang(){
+
             }
         }
     }

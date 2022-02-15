@@ -1,6 +1,9 @@
 <template>
     <div>
-        <h2 @click="ViewArticle" class="Creator-title"><a class="Creator-title-a">{{ Title }}</a></h2>
+        <div style="display:flex;justify-content:space-between;">
+            <h2 @click="ViewArticle" class="Creator-title"><a class="Creator-title-a">{{ Title }}</a></h2>
+            <slot name="head"></slot>
+        </div>
         <div>
             <div class="Creator-box">
                 <div class="Creator-item">

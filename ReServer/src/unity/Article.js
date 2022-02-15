@@ -208,6 +208,7 @@ class ArticlesControl{
     }
     async getArticleNumByLang(lang){
         await this.getAll()
+        if(!this.#private_articles_tree[lang]) return false
         return this.#private_articles_tree[lang]
     }
     hasLang(lang){
@@ -227,7 +228,7 @@ class ArticlesControl{
         selfArticle.setOhterLangArticle(targeArticle.lang,targeArticle.id)
         targeArticle.setOhterLangArticle(selfArticle.lang,selfArticle.id)
     }
-    getOtherLangArticle(lang,Article){
+    async getOtherLangArticle(lang,Article){
         const otherLangeArticle = await this.getArticleByLangAndId(Article.getOhterLangArticle(lang),lang)
         return otherLangeArticle
     }

@@ -1,11 +1,25 @@
 import axios from 'axios'
 import { AdminApi,BlogApi,Host } from './API'
+import CookiesHelper from '../utils/Cookies'
 
 axios.defaults.baseURL = Host
 axios.defaults.timeout = 3000
 
 
 const request = {}
+
+
+axios.interceptors.request.use(function (config) {
+    // 在发送请求之前做些什么
+    if(config.method === 'post'){
+        config.data['language'] = CookiesHelper.getItem('language') ? CookiesHelper.getItem('language') : navigator.language
+    }
+    return config;
+  }, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  });
+
 
 
 request.Login = function (UserName,PassWord) {
@@ -18,10 +32,14 @@ request.TokenTest = function () {
 }
 
 
-request.GetPage = function (PageNum) {
+request.GetPage = function (PageNum,Lang) {
     return axios.request({
         method:BlogApi.GetPage.Method,
-        url:`${BlogApi.GetPage.PATH}/${PageNum}`
+        url:`${BlogApi.GetPage.PATH}`,
+        data:{
+            PageNum,
+            Lang
+        }
     })
 }
 

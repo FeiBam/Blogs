@@ -1,6 +1,5 @@
 <template>
     <div class="blog-main-content" style="display: flex">
-        <button @click="log()" />
         <front></front>
         <Side></Side>
     </div>
@@ -17,11 +16,6 @@
         },
         data(){
             return{
-            }
-        },
-        methods:{
-            log(){
-                this.$i18n.changeLang('jp-JA')
             }
         }
     }

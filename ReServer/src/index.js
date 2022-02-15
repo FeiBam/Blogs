@@ -18,6 +18,7 @@ function getConfig(){
 app.use(async (ctx,next)=>{
     ctx.set('Access-Control-Allow-Origin','*')
     ctx.set('Access-Control-Allow-Method','GET,POST')
+    ctx.set('Access-Control-Allow-Headers','*')
     if(ctx.request.method === 'OPTIONS'){
         return ctx.status = 204
     }

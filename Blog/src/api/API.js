@@ -49,8 +49,8 @@ const BlogApi  = {
         PATH:'/page/ArticleTag'
     },
     GetPage:{
-        Method:'GET',
-        PATH:'/page/Aritcles'
+        Method:'POST',
+        PATH:'/page/Articles'
     }
 }
 
