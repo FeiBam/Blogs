@@ -12,6 +12,7 @@ const request = {}
 axios.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
     if(config.method === 'post'){
+        if(!config.data) config.data = {}
         config.data['language'] = CookiesHelper.getItem('language') ? CookiesHelper.getItem('language') : navigator.language
     }
     return config;
@@ -91,7 +92,10 @@ request.getPageInfo = function (){
 request.getArticleById = function (id){
     return axios.request({
         method:BlogApi.getArticleById.Method,
-        url:BlogApi.getArticleById.PATH + '/' + id,
+        url:BlogApi.getArticleById.PATH,
+        data:{
+            id:id - 1
+        }
     })
 }
 

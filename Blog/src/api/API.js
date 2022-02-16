@@ -37,11 +37,11 @@ const AdminApi = {
 
 const BlogApi  = {
     GetPageInfo:{
-        Method:'GET',
+        Method:'POST',
         PATH:'/page/getPageInfo'
     },
     getArticleById:{
-        Method:'GET',
+        Method:'POST',
         PATH:'/page/Article'
     },
     getArticleTags:{

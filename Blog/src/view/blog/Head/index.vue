@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="cover-img">
-            <img src="https://img.vim-cn.com/29/91197b04c13f512f734a76d4ac422d89dbe229.jpg" class="cover-img">
+            <img src="@/assets/default-banner.jpg" class="cover-img">
         </div>
     </div>
 </template>

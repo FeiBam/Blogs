@@ -1,3 +1,7 @@
+body{
+    margin: 0;
+}
+
 .cover{
     position: relative;
     overflow: hidden;
@@ -87,17 +91,18 @@
     margin-right: 3px;
 }
 .menu-tag-active {
-    color: #1bc3fb;
-    border-bottom: 1px solid #1bc3fb;
+    color: white;
+    border-bottom: 1px solid white;
 }
 .menu-tag-unactive{
     color: rgba(51,51,51,.85);
 }
 .menu-flex > a:hover{
-    color: #1bc3fb;
-    border-bottom: 1px solid #1bc3fb;
+    color: whitesmoke;
+    border-bottom: 1px solid whitesmoke;
 }
 .menu-tag{
+    cursor: pointer;
     font-size: 14px;
     padding: 4px;
     margin: 0 4px;
@@ -188,6 +193,7 @@
 }
 
 .Article-Tag{
+    cursor: pointer;
     background-color: rgba(231,231,231,.5);
     margin-top: 16px;
     margin-bottom: -32px;
@@ -242,6 +248,7 @@
     margin-top: 16px;
 }
 .ReadMore > a {
+    cursor: pointer;
     font-weight: 700;
     color: #fff;
     display: inline-block;

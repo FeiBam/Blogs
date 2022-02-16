@@ -43,7 +43,14 @@
         methods:{
             ...mapActions('Blog',ActionsMixin)
         },
-        mounted() {
+        async mounted() {
+            if(!this.ViewArticleData.id){
+                const ArticleID = this.$route.params.Id
+                if(!await this[ActionsMixin.GetArticle](ArticleID)){
+                    console.log('Not Fount')
+                }
+                this[ActionsMixin.ViewArticle](ArticleID)
+            }
             setTitle(`飞竹的小站 | ${this.ViewArticleData.Title}`)
             const Md = new markdown()
             this.SubjectHtml = Md.render(this.ViewArticleData.Subject)

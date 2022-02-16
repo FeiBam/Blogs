@@ -136,8 +136,8 @@ class ArticlesControl{
         Article.setLang(Lang)
         this.#private_articles_tree[Lang].index += 1
         this.#private_articles_tree[Lang][ArticleID] = {
-            Article:Article,
             createDate:ArticleCreateDate,
+            ...Article
         }
         return this
     }
@@ -168,7 +168,7 @@ class ArticlesControl{
         const Article =  await this.#readArticle(Lang,ArticleId)
         this.#onLang(Lang)
         await this.#Update_Tree(Lang,ArticleId,Article)
-        return Article
+        return this.#private_articles_tree[Lang][ArticleId]
     }
     async getArticlesByLang(Lang){
         this.#onLang(Lang)
@@ -177,7 +177,7 @@ class ArticlesControl{
             const Article = await this.#readArticle(Lang,ArticleId)
             await this.#Update_Tree(Lang,ArticleId,Article)
         }
-        return this
+        return this.#private_articles_tree[Lang]
     }
     async createArticle(lang,...args){
         if(!lang){
@@ -209,7 +209,7 @@ class ArticlesControl{
     async getArticleNumByLang(lang){
         await this.getAll()
         if(!this.#private_articles_tree[lang]) return false
-        return this.#private_articles_tree[lang]
+        return this.#private_articles_tree[lang].index
     }
     hasLang(lang){
         for(let havedLang of Object.keys(this.#private_articles_tree)){

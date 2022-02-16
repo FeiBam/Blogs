@@ -33,10 +33,8 @@ const BlogModel = {
             if((infoData.ArticleNum % infoData.PageArticleLimit) === 0) state.AllPage = infoData.ArticleNum / infoData.PageArticleLimit
             state.ArticleLimit = infoData.PageArticleLimit
             state.ArticleNum = infoData.ArticleNum
-            console.log( Number((infoData.ArticleNum / infoData.PageArticleLimit).toFixed()) + 1)
         },
         [MutationsMixin.ViewArticle](state , ArticleId){
-            console.log(state.Articles,ArticleId)
             state.ViewArticleData = state.Articles[ArticleId]
         },
         [MutationsMixin.clearPage](state){
@@ -57,23 +55,44 @@ const BlogModel = {
                 throw err
             }
             state.isLoad = false
-            res.data.Articles.forEach(item=>{
+            res.data.data.Articles.forEach(item=>{
                 item['Creator'] = {
                     Name:item['Account'].Name,
                     Date:item.createDate
                 }
                 item = {...item,...item.Article}
-                item.id +=1
+                item.id = Number(item.id)
+                item.id += 1
                 commit(MutationsMixin.addArticle,item)
             })
             return true
         },
-        async [ActionsMixin.GetPageInfo]( { commit} ){
+        async [ActionsMixin.GetPageInfo]( { state, commit} ){
             const [err,PageInfo] = await AsyncErrCatch(request.getPageInfo())
             if(err) throw err
+            if(PageInfo.data.ArticleNum === 0){
+                state.isLoad = false
+                return false
+            }
             commit(MutationsMixin.setPageInfo,PageInfo.data)
             return true
         },
+        async [ActionsMixin.GetArticle] ( { commit }, id){
+            const [err,res] = await AsyncErrCatch(request.getArticleById(id))
+            if(err) throw err
+            if(res.data.code !== 1) throw Error('Not Found')
+            let ArticleData = res.data.data
+            let ArticleObject = {
+                Creator:{
+                    Name:ArticleData.Account.Name,
+                    Date:ArticleData.Article.createDate
+                },
+                ...ArticleData.Article,
+                id:Number(ArticleData.id) + 1
+            }
+            commit(MutationsMixin.addArticle,ArticleObject)
+            return true
+        }
     }
 }
 

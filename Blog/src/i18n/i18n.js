@@ -48,7 +48,7 @@ const Jp = {
 }
 
 
-const i18n = new I18n('jp-JA')
+const i18n = new I18n()
 
 i18n.addLangData('zh-CN',CN)
 i18n.addLangData('en-US',EN)

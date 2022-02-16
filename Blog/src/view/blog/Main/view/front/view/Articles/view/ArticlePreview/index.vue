@@ -51,6 +51,6 @@
             ...mapActions('Blog',{
                 ViewArticle:ActionsMixin.ViewArticle
             })
-        }
+        },
     }
 </script>
