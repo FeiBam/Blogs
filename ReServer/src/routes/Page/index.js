@@ -18,12 +18,13 @@ Router.post('/getPageInfo',async (ctx)=>{
     }
 })
 
-Router.post('/Articles',async (ctx)=>{
+Router.post('/',async (ctx)=>{
     let RequestData = ctx.request.body
     let ResponseObject = {
         Articles:[],
         index:0
     }
+    console.log(RequestData)
     const articlesControl = new ArticlesControl(ctx.state.globalConfig.Article.ArticlePath)
     const articles = await articlesControl.getArticlesByLang(RequestData.language)
     if(!articles){
@@ -44,20 +45,6 @@ Router.post('/Articles',async (ctx)=>{
         ResponseObject.Articles.push(temp)
         ResponseObject.index += 1
     }
-    return respondHandel.success(ctx,ResponseObject,'ok')
-})
-
-Router.post('/Article',async (ctx)=>{
-    let RequestData = ctx.request.body
-    let ResponseObject = {}
-    const articlesControl = new ArticlesControl(ctx.state.globalConfig.Article.ArticlePath)
-    let article = await articlesControl.getArticleByLangAndId(RequestData.id,RequestData.language)
-    console.log(article)
-    ResponseObject['id'] = Number(article.id)
-    ResponseObject['Account'] = {
-        Name:'Fei_Bam'
-    }
-    ResponseObject['Article'] = article
     return respondHandel.success(ctx,ResponseObject,'ok')
 })
 

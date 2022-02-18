@@ -42,7 +42,7 @@ const BlogApi  = {
     },
     getArticleById:{
         Method:'POST',
-        PATH:'/page/Article'
+        PATH:'/Article/'
     },
     getArticleTags:{
         Method:'GET',
@@ -50,7 +50,7 @@ const BlogApi  = {
     },
     GetPage:{
         Method:'POST',
-        PATH:'/page/Articles'
+        PATH:'/page/'
     }
 }
 
