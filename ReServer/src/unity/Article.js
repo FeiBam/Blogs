@@ -134,19 +134,17 @@ class ArticlesControl{
         const ArticleCreateDate = Article.get_ArticleCreateDate()
         Article.setID(ArticleID)
         Article.setLang(Lang)
+        Article.createDate = ArticleCreateDate
         this.#private_articles_tree[Lang].index += 1
-        this.#private_articles_tree[Lang][ArticleID] = {
-            createDate:ArticleCreateDate,
-            ...Article
-        }
+        this.#private_articles_tree[Lang][ArticleID] = Article
         return this
     }
     async save(){
         for (let lang of Object.keys(this.#private_articles_tree)){
             for (let ArticleId of Object.keys(this.#private_articles_tree[lang]).filter((item)=>{ if (item === 'index'){ return false} return item })){
-                console.log(ArticleId,this.#private_articles_tree[lang][ArticleId].Article.need_update())
-                if (this.#private_articles_tree[lang][ArticleId].Article.need_update()){
-                    fs.writeFileSync(`${this.#Articles_Path}/${lang}/${ArticleId}`,this.#private_articles_tree[lang][ArticleId].Article.get_ArticleJson())
+                console.log(ArticleId,this.#private_articles_tree[lang][ArticleId].need_update())
+                if (this.#private_articles_tree[lang][ArticleId].need_update()){
+                    fs.writeFileSync(`${this.#Articles_Path}/${lang}/${ArticleId}`,this.#private_articles_tree[lang][ArticleId].get_ArticleJson())
                 }
             }
         }
@@ -237,9 +235,6 @@ class ArticlesControl{
         targetClass[FuncName] = Call
     }
 }
-
-
-
 
 module.exports = {
     ArticleModel,
